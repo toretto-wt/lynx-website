@@ -43,15 +43,16 @@ name: string;
 
 A string representing the name of the `PerformanceEntry`. The value depends on the specific type of the `PerformanceEntry` object. The corresponding names for all subtypes are shown in the table below:
 
-|                                    subclasses                                     |                            name                             |
-| :-------------------------------------------------------------------------------: | :---------------------------------------------------------: |
-|         [`InitContainerEntry`](./performance-entry/init-container-entry)          |                         `container`                         |
-|          [`InitLynxviewEntry`](./performance-entry/init-lynxview-entry)           |                         `lynxview`                          |
-| [`InitBackgroundRuntimeEntry`](./performance-entry/init-background-runtime-entry) |                     `backgroundRuntime`                     |
-|             [`MetricFcpEntry`](./performance-entry/metric-fcp-entry)              |                            `fcp`                            |
-|             [`MetricTtiEntry`](./performance-entry/metric-tti-entry)              |                            `tti`                            |
-|       [`MetricActualFmpEntry`](./performance-entry/metric-actual-fmp-entry)       |                         `actualFmp`                         |
-|            [`LoadBundleEntry`](./performance-entry/load-bundle-entry)             | `loadBundle`, `reloadBundle`, `reloadFromBackgroundRuntime` |
+|                                    subclasses                                     |                                           name                                           |
+| :-------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
+|         [`InitContainerEntry`](./performance-entry/init-container-entry)          |                                       `container`                                        |
+|          [`InitLynxviewEntry`](./performance-entry/init-lynxview-entry)           |                                        `lynxview`                                        |
+| [`InitBackgroundRuntimeEntry`](./performance-entry/init-background-runtime-entry) |                                   `backgroundRuntime`                                    |
+|             [`MetricFcpEntry`](./performance-entry/metric-fcp-entry)              |                                          `fcp`                                           |
+|             [`MetricTtiEntry`](./performance-entry/metric-tti-entry)              |                                          `tti`                                           |
+|       [`MetricActualFmpEntry`](./performance-entry/metric-actual-fmp-entry)       |                                       `actualFmp`                                        |
+|               [`PipelineEntry`](./performance-entry/pipeline-entry)               | `updateTriggeredByBts`, `updateTriggeredByNative`, `updateGlobalProps`, `setNativeProps` |
+|            [`LoadBundleEntry`](./performance-entry/load-bundle-entry)             |                      `loadBundle`, `reloadBundle`, `reloadFromBts`                       |
 
 ## Compatibility
 
