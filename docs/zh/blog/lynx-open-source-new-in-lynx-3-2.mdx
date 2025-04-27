@@ -117,7 +117,7 @@ it('basic render', () => {
 
 ![lynx-for-web-multithread](/assets/lynx-3-2/lynx-for-web-multithread.png)
 
-以下是真实业务场景中性能对比，Lynx For Web 多线程渲染相对于 React 实现的无优化版本 Web 有 30% 左右的优化；同时也提供了一个测试 Case，若您对此感兴趣可以基于此探索。
+以下是真实业务场景中性能对比，Lynx For Web 多线程渲染相对于 React 实现的无优化版本 Web 有 30% 左右的优化；同时也提供了一个[测试 Case](https://github.com/PupilTong/performance-explanation-react-vs-reactlynx)，若您对此感兴趣可以基于此探索。
 
 | React Web                           | Lynx For Web                           |
 | ----------------------------------- | -------------------------------------- |
@@ -139,7 +139,7 @@ it('basic render', () => {
 
 #### 支持 queueMicrotask
 
-受限于 iOS JSC 版本兼容性问题，Lynx 早期版本无法直接调用 JSC 原生 Promise，Promise 实现采用`setTimeout`实现异步逻辑的 polyfill 方案。这一机制导致 `Promise.then()` 回调以宏任务形式执行，与标准 JS 中微任务的高优先级机制不兼容，可能出现异步回调执行顺序与浏览器不一致的问题。在 Lynx 3.2 中基于实现 queueMicrotask 实现了微任务调用，从而实现任务插队需求，支持更为标准的 Promise。相应的 Promise 的实现差异，可以通过以下代码来验证，其行为与主流浏览器不一致。
+受限于 iOS JSC 版本兼容性问题，Lynx 早期版本无法直接调用 JSC 原生 `Promise`，Lynx `Promise` 实现采用`setTimeout`实现异步逻辑的 polyfill 方案。这一机制导致 `Promise.then()` 回调以宏任务形式执行，与标准 JS 中微任务的高优先级机制不兼容，可能出现异步回调执行顺序与浏览器不一致的问题。在 Lynx 3.2 中基于实现 queueMicrotask 实现了微任务调用，从而实现任务插队需求，支持更为标准的 Promise。相应的 Promise 的实现差异，可以通过以下代码来验证，其行为与主流浏览器不一致。
 
 ```js
 setTimeout(() => {
