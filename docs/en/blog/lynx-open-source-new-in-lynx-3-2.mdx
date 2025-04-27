@@ -14,19 +14,19 @@ _April 29th, 2025_
 
 <BlogAvatar list={['shiwentao']} />
 
-[2025 年 3 月](blog/lynx-unlock-native-for-more)，我们将 Lynx 正式开源，并收集到了许多宝贵的反馈和建议，感谢大家对 Lynx 的关注与支持。今天，我很高兴与大家分享 Lynx 最新的情况：Lynx 3.2 正式发布了！该版本包含许多功能增强和优化，旨在提升 Lynx 的开发体验并优化 Lynx 性能。
+[More than a month ago](blog/lynx-unlock-native-for-more), we launched Lynx as an open-source project and have since gathered valuable insights and feedback from the community. Thank you for engaging with Lynx, even as we take our first steps as a new member of the open-source cross-platform ecosystem. Today, I'm pleased to share the latest updates on Lynx with all of you: Lynx 3.2 released! This release contains enhancements and features focused on refining your development experience and boosting your app’s performance.
 
 ![lynx-in-3-2](/assets/lynx-3-2/lynx-3-2.png)
 
-Lynx 3.2 对框架、引擎和工具进行了全面更新。其中，List 元件、ReactLynx 测试工具、Lynx For Web 以及 Rspeedy 工具均得到了改进，使得开发过程更加高效，性能也有了显著提升。此外，DevTools 中新增的一些特性令人惊喜，能够让开发者在调试 Lynx 项目时更加流畅，有效提高开发效率。值得一提的是，Lynx 3.2 拥有来自 72 位贡献者的超过 [401 次提交](https://github.com/lynx-family/lynx/releases/)；其中包含许多外部开发者，在文档、工具、功能上对 Lynx 开源给予很大的帮助；Lynx 作为开源领域的新成员，具备不错的社区活力和协作精神，同时未来还有很大的进步空间。让我们一起开始探索吧！
+Lynx 3.2 has updated the framework, engine, and tools. Specifically, the List component, ReactLynx testing tools, Lynx For Web, and Rspeedy tools have all been improved, making the development process more efficient and leads to a significant improvement in performance. Additionally, we've introduced exciting new features in DevTools, making it easier than ever to debug Lynx projects. With over [296 commits](https://github.com/lynx-family/lynx/releases/) from 61 contributors (including some first time contributors!) who helped enhance the open-source project through documentation and feature contributions. Although Lynx is a new member of the open-source community, it still has good community vitality and a spirit of collaboration. Let’s explore what’s new!
 
 ## Framework
 
 ### RSpeedy
 
-Rspeedy [v0.9.0](https://github.com/lynx-family/lynx-stack/discussions/482) 已发布，默认打包库使用 [Rslib](https://lib.rsbuild.dev/)，整体安装体积减少了超过 50%。同时该版本将 [Rspack](https://rspack.dev/) 升级至 [1.3](https://rspack.dev/blog/announcing-1-3) 带来了更多增强功能，例如更快的代码拆分、更小的打包体积、更低的内存消耗。此外，该版本还包含一些其他改进，如新增配置项等功能。有关这些更改的完整概述，请查看 [`@lynx-js/rspeedy v0.9.0`](https://github.com/lynx-family/lynx-stack/blob/main/packages/rspeedy/core/CHANGELOG.md#090) 变更日志。
+Rspeedy [v0.9.0](https://github.com/lynx-family/lynx-stack/discussions/482) has been released. In v0.9.0 Rspeedy bundles with [Rslib](https://lib.rsbuild.dev/), slashing the installation size by 50%. And upgrade to [Rspack](https://rspack.dev/) [1.3](https://rspack.dev/blog/announcing-1-3) offers enhanced features such as quicker code splitting, a smaller bundle size, reduced memory consumption. Additionally, the release includes other enhancements like new CLI flags, configurations. For a comprehensive overview of these changes, explore the full CHANGELOG [`@lynx-js/rspeedy v0.9.0`](https://github.com/lynx-family/lynx-stack/blob/main/packages/rspeedy/core/CHANGELOG.md#090)
 
-若要体验 Rspeedy v0.9.0 版本的新功能，您可以在 Rspeedy 项目中使用以下命令进行升级：
+Upgrade now using the following command in your Rspeedy project:
 
 ```js
 npx upgrade-rspeedy@latest
@@ -35,29 +35,25 @@ npx upgrade-rspeedy@latest
 #### Bundle with Rslib
 
 ![Rspeedy0-9-0](/assets/lynx-3-2/Rspeedy0-9-0.png)
-`@lynx-js/rspeedy` 包及其所有插件现已使用 Rslib 打包，线下测试安装大小从 118 MB 减少到仅 53 MB，降幅达 50%。更多详细信息请查看 [#395](https://github.com/lynx-family/lynx-stack/pull/395)。
+The `@lynx-js/rspeedy package, along with all its plugins, is now bundled with Rslib, reducing the installation size by 50%—from 118 MB to just 53 MB. See [#395](https://github.com/lynx-family/lynx-stack/pull/395) for more details.
 
 #### Upgrade to Rspack 1.3
 
-借助 Rspack 升级，让 Rspeedy 具备更快的代码拆分、更小的打包体积、更低的内存消耗以及新增[CircularDependencyRspackPlugin](https://rspack.dev/plugins/rspack/circular-dependency-rspack-plugin)（检测运行时模块之间的循环导入依赖关系），更多信息参考 [Announcing Rspack 1.3](https://rspack.dev/blog/announcing-1-3)。
-
-#### Updates and Improvements
-
-- 新增了 `--environment`、`--env-mode` 和 `--base` 命令行标志（CLI flags）。
-- 引入了新配置项，如 `dev.hmr`、`dev.liveReload`、`output.distPath.*` 和 `performance.printFileSize`。
-- 支持选择最合适的网络接口以确保操作流畅。
+With the upgrade of Rspack 1.3, Rspeedy has achieved faster code splitting, smaller package size, lower memory consumption, and added the [CircularDependencyRspackPlugin](https://rspack.dev/plugins/rspack/circular-dependency-rspack-plugin) (which detects circular import dependencies between runtime modules). See [Announcing Rspack 1.3](https://rspack.dev/blog/announcing-1-3) for more details.
 
 ### ReactLynx Testing Library
 
-在最新的 ReactLynx 中实现了 [ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/testing-library/react-lynx-testing-library)，它是基于 Lynx 测试环境（[`@lynx-js/test-environment`](http://10.37.80.228:3000/react/react-lynx-testing-library/lynx-test-environment.html)），为 ReactLynx 实现的一套测试解决方案。它的灵感源自 React 测试库，与 `jsdom` 等工具所提供的 DOM 环境类似，Lynx 引擎负责提供测试环境的 JavaScript 实现，基于 `jsdom` 来实现 [Element PAPI](https://lynxjs.org/api/engine/element-api)。因此可以直接使用诸如 [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library) 和 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) 等工具来辅助测试。
+[ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/testing-library/react-lynx-testing-library) implements a set of testing solutions for ReactLynx components based on [Lynx Test Environment (@lynx-js/test-environment, JS implementation of Lynx)](http://10.37.80.228:3000/react/react-lynx-testing-library/lynx-test-environment.html).
+
+ReactLynx Testing Library is inspired by React Testing Library. The underlying Lynx Test Environment is responsible for providing the JS implementation of the Lynx Test Environment, similar to the DOM environment provided by tools such as `jsdom`. We use `jsdom` in Lynx Test Environment to implement [Element PAPI](https://lynxjs.org/api/engine/element-api), so you can directly use tools such as [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library) and [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) to assist testing.
 
 #### Applicable scenarios
 
-ReactLynx Testing Library 适用于对 ReactLynx 组件进行单元测试。基于 `@testing-library/dom`（用于页面元素的查询和事件触发），屏蔽了 Lynx 双线程的实现细节，并将 ReactLynx 的渲染过程抽象成与 React 测试库类似的 API，如 `render`等。用户还可以对页面中的元素进行断言，例如使用 `@testing-library/jest-dom` 中的 `toBeInTheDocument` 来判断元素是否存在于页面中。
+ReactLynx Testing Library is suitable for unit testing of ReactLynx components. It is based on Lynx Test Environment and `@testing-library/dom` (querying and event triggering of page elements), shielding the implementation details of Lynx dual threads, and abstracting the rendering process of ReactLynx into `render`, `fireEvent`, `screen` and other APIs similar to React Testing Library. Users can also assert the elements in the page. For example, use `data-testid` to quickly find the element, and use `toBeInTheDocument` in `@testing-library/jest-dom` to determine whether the element is in the page.
 
 #### **User Guide**
 
-- ReactLynx Testing Library 已集成到 [`@lynx-js/react`](https://www.npmjs.com/package/@lynx-js/react) 包的 `testing-library` 子目录中，可直接使用。之后配置 [Vitest](https://vitest.dev/) 测试框架，您就可以开始编写测试并运行它们了。
+- ReactLynx Testing Library is integrated into the `testing-library` subdirectory of the `@lynx-js/react` package and can be used directly. After configuring the [Vitest](https://vitest.dev/), you can start writing tests and running them.
 
 ```js
 // vitest.config.js
@@ -74,7 +70,7 @@ const config = defineConfig({
 export default mergeConfig(defaultConfig, config);
 ```
 
-- 以下是一个完整的示例，用于来做基础渲染测试的 case，更多的测试使用方式可以参考 [ReactLynx Testing Library](http://10.37.80.228:3000/react/react-lynx-testing-library/index.html)。
+- Here is a complete example of a basic rendering test case. For more testing usage methods, see [ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/testing-library/react-lynx-testing-library) for more details.
 
 ```js
 import '@testing-library/jest-dom';
@@ -109,21 +105,23 @@ it('basic render', () => {
 
 ### Lynx For Web
 
-[Lynx for Web](https://github.com/lynx-family/lynx-stack/tree/main/packages/web-platform) 是基于浏览器 API 来模拟实现 Lynx，最终将 Lynx 代码运行到浏览器一种方式。通过这种方式，Lynx for Web 能够帮助 Lynx 扩展到更多平台，如桌面设备、电视或物联网（IoT）设备。在 Lynx For Web [0.12.0](https://www.npmjs.com/package/@lynx-js/web-core/v/0.12.0) 版本中，借助 Rspack Worker 能力创建 Worker，完整实现了 Lynx For Web 多线程渲染，达到与 Lynx Android 和 iOS 相近的高性能表现。在实际项目中，其渲染性能相比 React 实现（未做任何优化）的同等页面提升了约 30%。
+[Lynx for Web](https://github.com/lynx-family/lynx-stack/tree/main/packages/web-platform) is an implementation of Lynx's native binding APIs based on Browser APIs. In this way, Lynx for Web can help Lynx expand to more platforms, such as desktops, TVs, or Internet of Things (IoT) devices.
+
+In previous versions, the implementation used in Lynx for Web was a single-threaded version. In the [0.12.0](https://www.npmjs.com/package/@lynx-js/web-core/v/0.12.0) version, Rspack Worker capabilities will be used to create Workers, thereby achieving multi-threaded rendering and truly delivering high performance similar to Lynx Android and iOS. In real project experience, the rendering performance has been improved by 30%.
 
 #### MultiThread Render
 
-借助于 Worker，从而完整实现了 Lynx For Web 多线程渲染，达到与 Lynx Android 和 iOS 相近的高性能表现。下图中 React 实现的 Web 主要逻辑在 Main Thread 中执行，Lynx For Web 多线程渲染设计中，Main Thread 只执行渲染、DOM相关逻辑。卡片的 JS 逻辑，如数据处理、VDOM Diff 在 Worker 中并发执行，这样 JS 逻辑越复杂性能优势越明显。
+With the help of Workers, Lynx For Web has fully implemented multi-thread rendering, achieving high-performance comparable to Lynx Android and iOS. In the Web implementation of React shown in the figure below, the main logic runs in the Main Thread. In the multi-thread rendering design of Lynx For Web, the Main Thread is only responsible for rendering and DOM related logic. The JS logic of cards, such as data processing and VDOM Diff, is executed concurrently in workers. The more complex the JS logic is, the more obvious the performance advantages will be.
 
 ![lynx-for-web-multithread](/assets/lynx-3-2/lynx-for-web-multithread.png)
 
-以下是真实业务场景中性能对比，Lynx For Web 多线程渲染相对于 React 实现的无优化版本 Web 有 30% 左右的优化；同时也提供了一个测试 Case，若您对此感兴趣可以基于此探索。
+Here’s a performance comparison in some business scenarios, Lynx For Web's multi-thread rendering achieves a 30% optimization compared to the unoptimized Web implementation of React. Meanwhile, a [test case](https://github.com/PupilTong/performance-explanation-react-vs-reactlynx) is also provided. If you are interested, you can explore based on this.
 
 | React Web                           | Lynx For Web                           |
 | ----------------------------------- | -------------------------------------- |
 | ![](/assets/lynx-3-2/react-web.png) | ![](/assets/lynx-3-2/lynx-for-web.png) |
 
-如果您想立即体验 Lynx for Web 最新高性能的实现，可以在现有的项目依赖中快速配置：
+If you want to experience the latest Lynx for Web, you can quickly configure it in your existing project dependencies:
 
 ```js
 "dependencies": {
@@ -139,7 +137,9 @@ it('basic render', () => {
 
 #### queueMicrotask
 
-受限于 iOS JSC 版本兼容性问题，Lynx 早期版本无法直接调用 JSC 原生 Promise，Promise 实现采用`setTimeout`实现异步逻辑的 polyfill 方案。这一机制导致 `Promise.then()` 回调以宏任务形式执行，与标准 JS 中微任务的高优先级机制不兼容，可能出现异步回调执行顺序与浏览器不一致的问题。在 Lynx 3.2 中基于实现 queueMicrotask 实现了微任务调用，从而实现任务插队需求，支持更为标准的 Promise。相应的 Promise 的实现差异，可以通过以下代码来验证，其行为与主流浏览器不一致。
+Limited by the compatibility issues of the JSC version, the early versions of Lynx couldn't directly call the native `Promise` of JSC. The implementation of `Lynx Promise` adopted a polyfill solution using setTimeout to achieve asynchronous logic. This mechanism causes Promise.then() callbacks to be executed as macro-tasks, which is incompatible with the high-priority mechanism of micro-tasks in standard JavaScript. There may be situations where the execution order of asynchronous callbacks differs from that in browsers.
+
+In Lynx 3.2, micro-task calls were implemented based on queueMicrotask, thus meeting the requirement for task preemption and supporting a more standard implementation of Promise. The corresponding differences in the implementation of Promise can be verified through the following code, and its behavior is inconsistent with that of mainstream browsers.
 
 ```js
 setTimeout(() => {
@@ -151,11 +151,11 @@ Promise.resolve().then((value) => {
 });
 ```
 
-| 优化前 Lynx 运行结果                       | Chrome 运行结果                              |
+| Results of Lynx before optimization.       | Results in Chrome.                           |
 | ------------------------------------------ | -------------------------------------------- |
 | ![](/assets/lynx-3-2/lynx-test-result.png) | ![](/assets/lynx-3-2/chrome-test-result.png) |
 
-在您的项目中可通过 `enableMicrotaskPromisePolyfill`来开启基于 queueMicrotask 的 `Promise` 实现。
+In your project, you can enable the Promise implementation based on queueMicrotask by using `enableMicrotaskPromisePolyfill`.
 
 ```js
 // lynx.config.js
@@ -168,7 +168,7 @@ module.exports = {
 
 #### console series API
 
-新增 console.[count、countReset、group、groupCollapsed、groupEnd、time、timeLog、timeEnd] API ，对齐 [W3C 标准](https://developer.mozilla.org/en-US/docs/Web/API/console)的实现，可在 Lynx DevTool 控制台查看相关内容。
+console series API such as `console.[count, countReset, group, groupCollapsed, groupEnd, time, timeLog, timeEnd]` have been added, which are implemented in alignment with the [W3C standard](https://developer.mozilla.org/en-US/docs/Web/API/console). You can debug in the Lynx DevTool console.
 
 <center>
   <img
@@ -183,9 +183,8 @@ module.exports = {
 
 #### Grid Layout
 
-为解决在使用 [Grid ](https://lynxjs.org/guide/ui/layout/grid-layout.html)布局遇到难以确定轨道尺寸的问题，Lynx 3.2 中在 Grid 轨道样式中引入 W3C 标准的布局关键字 `minmax()`、`max-content`、`fit-content`，配和在 `grid-template-columns`、`grid-template-rows`、`grid-auto-columns`、`grid-auto-rows` 中使用，帮助更精确确定 Grid 容器的尺寸。
-
-以下示例中，有一个三列的网格，第一列展示固定大小为容器宽度的 20%、第二列第二列根据最大内容来展示、第三列最小需要 50px 宽度展示，最大是可以填充到最大的内容展示，最终受容器限制。我们可以使用 `grid-template-columns: 20% max-content minmax(50px, max-content)` 来实现这一布局。
+To resolve some difficulty in determining track sizes when using [Grid Layout](https://lynxjs.org/guide/ui/layout/grid-layout.html), Lynx 3.2 has introduced the W3C - standard layout keywords `minmax()`,`max-content`,`fit-content`minmax(), max - content, and fit - content in Grid track styles. These keywords can be used in conjunction with `grid-template-columns`, `grid-template-rows`, `grid-auto-columns`, and `grid-auto-rows` to help more precisely determine the size of the Grid container.
+In the following example, there is a three-column grid. The first column has a fixed size of 20% of the container's width. The second column is sized according to its maximum content. The third column requires a minimum width of 50px for display and can expand to fit its maximum content, ultimately being restricted by the container. We can use `grid-template-columns: 20% max-content minmax(50px, max-content)` to achieve this layout.
 
 <Go
   example="css"
@@ -198,7 +197,7 @@ module.exports = {
 
 #### Text Select
 
-在之前的发布的 Lynx 版本中，仅支持在文本元素内复制文本。在长文章页面等更复杂的场景中，每个文本元素为一个段落，此时需要跨文本元素的文本复制能力，Lynx 3.2 版本完成支持了该能力，使文本复制体验接近 Web。
+In the previously versions of Lynx, only text copying within text elements was supported. In more complex cases, such as long article pages, each text element represents a paragraph. In such cases, the ability to copy text across text elements is required. The Lynx 3.2 version now fully supports this ability, making the text-copying experience similar to that on the Web.
 
 <Go
   img="/assets/lynx-3-2/cross-text-select.gif"
@@ -210,21 +209,28 @@ module.exports = {
 
 ### `<list>` Element
 
-我们在 Lynx 3.2 中对 `<list>`元件的功能做了完善以提供更好的开发体验，同时还对其首屏、滚动做了深度的优化，使得 `<list>` 具备更加优秀的性能表现。
+In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer a better development experience. Additionally, we've conducted in-depth optimizations on its first-screen rendering and scrolling performance, enabling the `<list>` to deliver even better performance.
 
 #### Performance Optimization
 
-- 多线程配合子节点的批量渲染，通过对子树进行异步解析属性与树结构调整，优化批量渲染节点的整体耗时，从而提升`<list>`首屏或者数据更新时的渲染性能。经验证，测试环境中复杂页面的首屏性能提升 20%+
+- Multi-threaded batch rendering of child nodes: By asynchronously parsing attributes and adjusting the tree structure of subtrees, the overall time consumption for batch rendering nodes is optimized, improving the rendering performance of the `<list>` during first-screen loading or data updates. Some complex pages show that the first-screen performance has been improved by over 20%.
 
-<center>
-  <img src="/assets/lynx-3-2/list-batch-render.png" width="800" height="800" />
-</center>
+  <center>
+    <img
+      src="/assets/lynx-3-2/list-batch-render.png"
+      width="800"
+      height="800"
+    />
+  </center>
 
-- `<list>`异步渲染模式的设计，增加多种策略来解决异步调度产生渲染完整性问题，带来更极致的滚动体验
-
-<center>
-  <img src="/assets/lynx-3-2/list-async-render.png" width="800" height="800" />
-</center>
+- Design of the asynchronous rendering mode for `<list>`. Multiple strategies are added to address rendering integrity issues caused by asynchronous scheduling, bringing a more extreme scrolling experience.
+  <center>
+    <img
+      src="/assets/lynx-3-2/list-async-render.png"
+      width="800"
+      height="800"
+    />
+  </center>
 
 <Go
   img="/assets/lynx-3-2/list-async-render.gif"
@@ -236,35 +242,34 @@ module.exports = {
 
 #### Feature Update
 
-- 完善[磁吸定位能力](https://lynx.bytedance.net/api/components/built-in/list.html#item-snap)，使分页滚动体验更加顺畅。基于这一改进，开发者可以用不足 10 行代码构建沉浸式的信息流体验，跑马灯这类需要精确控制位移的复杂交互也能轻松实现
+- We've improved the [magnetic positioning capability](https://lynx.bytedance.net/api/components/built-in/list.html#item-snap) to make the paginated scrolling experience smoother. Thanks to this enhancement, developers can create an immersive information feed experience with less than 10 lines of code. Some complex interactions like carousels can also be easily implemented.
 
-<Go
-  img="/assets/lynx-3-2/list-snap.gif"
-  example="list"
-  defaultFile="src/horizontal-snap/index.tsx"
-  defaultEntryFile="dist/horizontal-snap.lynx.bundle"
-  entry="src/horizontal-snap"
-/>
+  <Go
+    img="/assets/lynx-3-2/list-snap.gif"
+    example="list"
+    defaultFile="src/horizontal-snap/index.tsx"
+    defaultEntryFile="dist/horizontal-snap.lynx.bundle"
+    entry="src/horizontal-snap"
+  />
 
-- 增加对`<list-item>`上 [z-index](https://lynxjs.org/zh/api/css/properties/z-index.html) 的支持，能够更加灵活的调整列表项的视图层级
-
-<Go
-  img="/assets/lynx-3-2/list-z-index.gif"
-  example="list"
-  defaultFile="src/zIndex/index.tsx"
-  defaultEntryFile="dist/zIndex.lynx.bundle"
-  entry="src/zIndex"
-/>
+- Added support for the [z-index](https://lynxjs.org/zh/api/css/properties/z-index.html) property on `<list-item>`, allowing for more flexible adjustment of the view hierarchy of list items.
+  <Go
+    img="/assets/lynx-3-2/list-z-index.gif"
+    example="list"
+    defaultFile="src/zIndex/index.tsx"
+    defaultEntryFile="dist/zIndex.lynx.bundle"
+    entry="src/zIndex"
+  />
 
 ### Integration Guides
 
 #### Android
 
-参照官网[接入 Lynx 到现有应用](https://lynxjs.org/zh/guide/start/integrate-with-existing-apps.html#platform=ios)，更新 Lynx 以及 LynxService 依赖版本，完成 Lynx 3.2 版本升级。
+Refer to [integrate-with-existing-apps](https://lynxjs.org/guide/start/integrate-with-existing-apps.html#platform=ios), update the dependency versions of Lynx and LynxService.
 
-##### Lynx 依赖版本更新
+##### Update Lynx Version
 
-在工程的 `build.gradle` 或 `build.gradle.kts` 中，升级依赖至如下版本：
+In the `build.gradle` or `build.gradle.kts` file of the project, upgrade the version:
 
 <Tabs groupId='update-lynx-3-2-with-existing-app'>
 <Tab label="build.gradle">
@@ -295,9 +300,9 @@ dependencies {
 </Tab>
 </Tabs>
 
-##### LynxService 依赖版本更新
+##### Update LynxService Version
 
-在工程的 `build.gradle` 或 `build.gradle.kts` 中，升级依赖至如下版本：
+In the `build.gradle` or `build.gradle.kts` file of the project, upgrade the version:
 
 <Tabs groupId='update-lynx-3-2-with-existing-app'>
 <Tab label="build.gradle">
@@ -370,9 +375,9 @@ dependencies {
 
 #### iOS
 
-##### Lynx 依赖版本更新
+##### Update Lynx Version
 
-在项目的 `Podfile` 中，更新依赖至如下版本：
+In the `Podfile` file of the project, upgrade the version:
 
 <CodeFold height={360} toggle>
 ```ruby title="Podfile" {1,6-8,10}
@@ -391,9 +396,9 @@ end
 ````
 </CodeFold>
 
-##### LynxService 依赖版本更新
+##### Update LynxService Version
 
-在项目的 `Podfile` 中，更新依赖至如下版本：
+In the `Podfile` file of the project, upgrade the version:
 
 <CodeFold height={360} toggle>
 ```ruby title="Podfile" {8-13,15-17}
@@ -424,7 +429,7 @@ end
 
 ### DEV Explorer
 
-在社区开发者 [PranshuChittora ](https://github.com/PranshuChittora)帮助下，iOS Lynx Explorer App 完成上架，使得体验 Lynx 变得更容易，对 Pranshu Chittora 的投入表示感谢。同时 Android Lynx Explorer App 上架在进行中，如果需要快速体验可以在 [Release Note](https://github.com/lynx-family/lynx/releases/) 中下载安装体验。
+With the help of community developer [PranshuChittora ](https://github.com/PranshuChittora), the iOS Lynx Explorer App has been successfully launched, making it easier to experience Lynx. We would like to express our gratitude to Pranshu Chittora for his dedication. Meanwhile, the launch of the Android Lynx Explorer App is in progress. If you want to experience it quickly, you can download and install it from the [Release Note](https://github.com/lynx-family/lynx/releases/).
 
 <center>
   <img src="/assets/lynx-3-2/dev-explorer.gif" width="200" height="200" />
@@ -432,9 +437,9 @@ end
 
 ### DevTool
 
-相信大部分 Lynx 开发者体验过 Lynx DevTool，会发现 DevTool 的左侧有一个截屏放映区域，用于镜像显示调试设备上的 Lynx 页面。在新的版本中新增了一个分辨率切换开关，可切换至 高清 (HD) 或 标清 (SD) 模式。当设备连接不稳定时，可使用标清模式减少数据传输带宽，使画面更流畅。
+As you know, there is a screencast area on the left part of DevTool, mirroring the Lynx page on your device. You now have a switch to change the resolution to High Definition or Standard Definition. When the device connection is not stable, you can use SD mode to reduce data transmission bandwidth, which tends to be smoother.
 
-如要体验该功能，访问 [DevTool Release 记录](https://github.com/lynx-family/lynx-devtool/releases) 下载最新 Lynx DevTool 桌面应用程序。
+Please visit the [DevTool Release](https://github.com/lynx-family/lynx-devtool/releases) to download the latest Desktop Application to experience it.
 
 <center>
   <img src="/assets/lynx-3-2/devtools-opt.gif" width="800" height="800" />
@@ -442,8 +447,6 @@ end
 
 ## Conclusion
 
-感谢 Lynx 社区全体成员对 Lynx 3.2 版本发布的大力支持！Lynx 作为一个新开源项目，我们对其未来满怀憧憬，也迫切地期待社区成员基于 Lynx 开发的应用程序早日亮相。
-
-未来，我们将与社区携手共进，按[规划](https://lynxjs.org/blog/lynx-open-source-roadmap-2025.html)陆续推出更多功能支持，例如新增 Input 等组件、适配鸿蒙与PC 等更多平台。在此过程中，恳请大家保持耐心并给予理解。
-
-请查阅版本说明和更新日志，开启您全新的 Lynx 开发构建之旅！
+Thanks to the Lynx community for making this release possible! As a newly open-source project, we have high hopes for the future of Lynx. We’re excited for the future and can’t wait to see use Lynx in your apps.
+In the future, we will gradually introduce more feature support as [planned](https://lynxjs.org/blog/lynx-open-source-roadmap-2025.html). For example, we'll add new components like `<Input>` and adapt to more platforms such as HarmonyOS and PCs.
+Please check the release notes and changelog, start a new Lynx development process!
