@@ -41,12 +41,6 @@ npx upgrade-rspeedy@latest
 
 借助 Rspack 升级，让 Rspeedy 具备更快的代码拆分、更小的打包体积、更低的内存消耗以及新增[CircularDependencyRspackPlugin](https://rspack.dev/plugins/rspack/circular-dependency-rspack-plugin)（检测运行时模块之间的循环导入依赖关系），更多信息参考 [Announcing Rspack 1.3](https://rspack.dev/blog/announcing-1-3)。
 
-#### 其他优化
-
-- 新增了 `--environment`、`--env-mode` 和 `--base` 命令行标志（CLI flags）。
-- 引入了新配置项，如 `dev.hmr`、`dev.liveReload`、`output.distPath.*` 和 `performance.printFileSize`。
-- 支持选择最合适的网络接口以确保操作流畅。
-
 ### ReactLynx Testing Library
 
 在最新的 ReactLynx 中实现了 [ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/testing-library/react-lynx-testing-library)，它是基于 Lynx 测试环境（[`@lynx-js/test-environment`](http://10.37.80.228:3000/react/react-lynx-testing-library/lynx-test-environment.html)），为 ReactLynx 实现的一套测试解决方案。它的灵感源自 React 测试库，与 `jsdom` 等工具所提供的 DOM 环境类似，Lynx 引擎负责提供测试环境的 JavaScript 实现，基于 `jsdom` 来实现 [Element PAPI](https://lynxjs.org/api/engine/element-api)。因此可以直接使用诸如 [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library) 和 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) 等工具来辅助测试。
@@ -113,7 +107,7 @@ it('basic render', () => {
 
 #### MultiThread Render
 
-借助于 Worker，从而完整实现了 Lynx For Web 多线程渲染，达到与 Lynx Android 和 iOS 相近的高性能表现。下图中 React 实现的 Web 主要逻辑在 Main Thread 中执行，Lynx For Web 多线程渲染设计中，Main Thread 只执行渲染、DOM相关逻辑。卡片的 JS 逻辑，如数据处理、VDOM Diff 在 Worker 中并发执行，这样 JS 逻辑越复杂性能优势越明显。
+借助于 Worker，从而完整实现了 Lynx For Web 多线程渲染，达到与 Lynx Android 和 iOS 相近的高性能表现。下图中 React 实现的 Web 主要逻辑在 Main Thread 中执行，而在 Lynx For Web 多线程渲染设计中，Main Thread 只执行渲染、DOM相关逻辑。卡片的 JS 逻辑，如数据处理、VDOM Diff 在 Worker 中并发执行，这样 JS 逻辑越复杂性能优势越明显。
 
 ![lynx-for-web-multithread](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-for-web-multithread.png)
 
@@ -135,7 +129,7 @@ it('basic render', () => {
 
 ## 引擎
 
-### Runtime
+### JS 运行时
 
 #### 支持 queueMicrotask
 
@@ -432,7 +426,7 @@ end
 
 ### DEV Explorer
 
-在社区开发者 [PranshuChittora ](https://github.com/PranshuChittora)帮助下，iOS Lynx Explorer App 完成上架，使得体验 Lynx 变得更容易，对 Pranshu Chittora 的投入表示感谢。同时 Android Lynx Explorer App 上架在进行中，如果需要快速体验可以在 [Release Note](https://github.com/lynx-family/lynx/releases/) 中下载安装体验。
+在社区开发者 [Pranshu Chittora ](https://github.com/PranshuChittora)帮助下，iOS Lynx Explorer App 完成在 App Store 上架，使得体验 Lynx 变得更容易，对 Pranshu Chittora 的投入表示感谢。同时 Android Lynx Explorer App 上架在进行中，如果需要快速体验可以在 [Release Note](https://github.com/lynx-family/lynx/releases/) 中下载安装体验。
 
 <center>
   <img
@@ -444,7 +438,7 @@ end
 
 ### DevTool
 
-相信大部分 Lynx 开发者体验过 Lynx DevTool，会发现 DevTool 的左侧有一个截屏放映区域，用于镜像显示调试设备上的 Lynx 页面。在新的版本中新增了一个分辨率切换开关，可切换至 高清 (HD) 或 标清 (SD) 模式。当设备连接不稳定时，可使用标清模式减少数据传输带宽，使画面更流畅。
+相信大部分 Lynx 开发者体验过 Lynx DevTool，会发现 DevTool 的左侧有一个截屏放映区域，用于镜像显示调试设备上的 Lynx 页面。在新的版本中新增了一个分辨率切换开关，可切换至高清 (HD) 或标清 (SD) 模式。当设备连接不稳定时，可使用标清模式减少数据传输带宽，使画面更流畅。
 
 如要体验该功能，访问 [DevTool Release 记录](https://github.com/lynx-family/lynx-devtool/releases) 下载最新 Lynx DevTool 桌面应用程序。
 
