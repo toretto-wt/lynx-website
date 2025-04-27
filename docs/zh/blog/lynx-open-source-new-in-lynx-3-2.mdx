@@ -16,7 +16,7 @@ _2025 年 4 月 29 日_
 
 [2025 年 3 月](blog/lynx-unlock-native-for-more)，我们将 Lynx 正式开源，并收集到了许多宝贵的反馈和建议，感谢大家对 Lynx 的关注与支持。今天，我很高兴与大家分享 Lynx 最新的情况：Lynx 3.2 正式发布了！该版本包含许多功能增强和优化，旨在提升 Lynx 的开发体验并优化 Lynx 性能。
 
-![lynx-in-3-2](/assets/lynx-3-2/lynx-3-2.png)
+![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
 
 Lynx 3.2 对框架、引擎和工具进行了全面更新。其中，List 元件、ReactLynx 测试工具、Lynx For Web 以及 Rspeedy 工具均得到了改进，使得开发过程更加高效，性能也有了显著提升。此外，DevTools 中新增的一些特性令人惊喜，能够让开发者在调试 Lynx 项目时更加流畅，有效提高开发效率。值得一提的是，Lynx 3.2 拥有来自 72 位贡献者的超过 [401 次提交](https://github.com/lynx-family/lynx/releases/)；其中包含许多外部开发者，在文档、工具、功能上对 Lynx 开源给予很大的帮助；Lynx 作为开源领域的新成员，具备不错的社区活力和协作精神，同时未来还有很大的进步空间。让我们一起开始探索吧！
 
@@ -34,7 +34,7 @@ npx upgrade-rspeedy@latest
 
 #### 使用 Rslib Bundle
 
-![Rspeedy0-9-0](/assets/lynx-3-2/Rspeedy0-9-0.png)
+![Rspeedy0-9-0](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/Rspeedy0-9-0.png)
 `@lynx-js/rspeedy` 包及其所有插件现已使用 Rslib 打包，线下测试安装大小从 118 MB 减少到仅 53 MB，降幅达 50%。更多详细信息请查看 [#395](https://github.com/lynx-family/lynx-stack/pull/395)。
 
 #### Rspack 升级到 1.3
@@ -115,13 +115,13 @@ it('basic render', () => {
 
 借助于 Worker，从而完整实现了 Lynx For Web 多线程渲染，达到与 Lynx Android 和 iOS 相近的高性能表现。下图中 React 实现的 Web 主要逻辑在 Main Thread 中执行，Lynx For Web 多线程渲染设计中，Main Thread 只执行渲染、DOM相关逻辑。卡片的 JS 逻辑，如数据处理、VDOM Diff 在 Worker 中并发执行，这样 JS 逻辑越复杂性能优势越明显。
 
-![lynx-for-web-multithread](/assets/lynx-3-2/lynx-for-web-multithread.png)
+![lynx-for-web-multithread](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-for-web-multithread.png)
 
 以下是真实业务场景中性能对比，Lynx For Web 多线程渲染相对于 React 实现的无优化版本 Web 有 30% 左右的优化；同时也提供了一个[测试 Case](https://github.com/PupilTong/performance-explanation-react-vs-reactlynx)，若您对此感兴趣可以基于此探索。
 
-| React Web                           | Lynx For Web                           |
-| ----------------------------------- | -------------------------------------- |
-| ![](/assets/lynx-3-2/react-web.png) | ![](/assets/lynx-3-2/lynx-for-web.png) |
+| React Web                                                                                                         | Lynx For Web                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/react-web.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-for-web.png) |
 
 如果您想立即体验 Lynx for Web 最新高性能的实现，可以在现有的项目依赖中快速配置：
 
@@ -151,9 +151,9 @@ Promise.resolve().then((value) => {
 });
 ```
 
-| 优化前 Lynx 运行结果                       | Chrome 运行结果                              |
-| ------------------------------------------ | -------------------------------------------- |
-| ![](/assets/lynx-3-2/lynx-test-result.png) | ![](/assets/lynx-3-2/chrome-test-result.png) |
+| 优化前 Lynx 运行结果                                                                                                     | Chrome 运行结果                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-test-result.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/chrome-test-result.png) |
 
 在您的项目中可通过 `enableMicrotaskPromisePolyfill`来开启基于 queueMicrotask 的 `Promise` 实现。
 
@@ -172,7 +172,7 @@ module.exports = {
 
 <center>
   <img
-    src="/assets/lynx-3-2/lynx-console.gif"
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-console.gif"
     width="400"
     height="400"
     align="center"
@@ -192,7 +192,7 @@ module.exports = {
   defaultFile="src/grid_layout/index.tsx"
   defaultEntryFile="dist/grid_layout.lynx.bundle"
   highlight="{24}"
-  img="/assets/lynx-3-2/grid-minmax.png"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/grid-minmax.png"
   entry="src/grid_layout"
 />
 
@@ -201,7 +201,7 @@ module.exports = {
 在之前的发布的 Lynx 版本中，仅支持在文本元素内复制文本。在长文章页面等更复杂的场景中，每个文本元素为一个段落，此时需要跨文本元素的文本复制能力，Lynx 3.2 版本完成支持了该能力，使文本复制体验接近 Web。
 
 <Go
-  img="/assets/lynx-3-2/cross-text-select.gif"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/cross-text-select.gif"
   example="text"
   defaultFile="src/cross_text_selection/index.tsx"
   defaultEntryFile="dist/cross_text_selection.lynx.bundle"
@@ -217,17 +217,25 @@ module.exports = {
 - 多线程配合子节点的批量渲染，通过对子树进行异步解析属性与树结构调整，优化批量渲染节点的整体耗时，从而提升`<list>`首屏或者数据更新时的渲染性能。经验证，测试环境中复杂页面的首屏性能提升 20%+
 
 <center>
-  <img src="/assets/lynx-3-2/list-batch-render.png" width="800" height="800" />
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-batch-render.png"
+    width="800"
+    height="800"
+  />
 </center>
 
 - `<list>`异步渲染模式的设计，增加多种策略来解决异步调度产生渲染完整性问题，带来更极致的滚动体验
 
 <center>
-  <img src="/assets/lynx-3-2/list-async-render.png" width="800" height="800" />
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.png"
+    width="800"
+    height="800"
+  />
 </center>
 
 <Go
-  img="/assets/lynx-3-2/list-async-render.gif"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.gif"
   example="list"
   defaultFile="src/asyncRendering/index.tsx"
   defaultEntryFile="dist/asyncRendering.lynx.bundle"
@@ -239,7 +247,7 @@ module.exports = {
 - 完善[磁吸定位能力](https://lynx.bytedance.net/api/components/built-in/list.html#item-snap)，使分页滚动体验更加顺畅。基于这一改进，开发者可以用不足 10 行代码构建沉浸式的信息流体验，跑马灯这类需要精确控制位移的复杂交互也能轻松实现
 
 <Go
-  img="/assets/lynx-3-2/list-snap.gif"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-snap.gif"
   example="list"
   defaultFile="src/horizontal-snap/index.tsx"
   defaultEntryFile="dist/horizontal-snap.lynx.bundle"
@@ -249,7 +257,7 @@ module.exports = {
 - 增加对`<list-item>`上 [z-index](https://lynxjs.org/zh/api/css/properties/z-index.html) 的支持，能够更加灵活的调整列表项的视图层级
 
 <Go
-  img="/assets/lynx-3-2/list-z-index.gif"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-z-index.gif"
   example="list"
   defaultFile="src/zIndex/index.tsx"
   defaultEntryFile="dist/zIndex.lynx.bundle"
@@ -427,7 +435,11 @@ end
 在社区开发者 [PranshuChittora ](https://github.com/PranshuChittora)帮助下，iOS Lynx Explorer App 完成上架，使得体验 Lynx 变得更容易，对 Pranshu Chittora 的投入表示感谢。同时 Android Lynx Explorer App 上架在进行中，如果需要快速体验可以在 [Release Note](https://github.com/lynx-family/lynx/releases/) 中下载安装体验。
 
 <center>
-  <img src="/assets/lynx-3-2/dev-explorer.gif" width="200" height="200" />
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/dev-explorer.gif"
+    width="200"
+    height="200"
+  />
 </center>
 
 ### DevTool
@@ -437,12 +449,16 @@ end
 如要体验该功能，访问 [DevTool Release 记录](https://github.com/lynx-family/lynx-devtool/releases) 下载最新 Lynx DevTool 桌面应用程序。
 
 <center>
-  <img src="/assets/lynx-3-2/devtools-opt.gif" width="800" height="800" />
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/devtools-opt.gif"
+    width="800"
+    height="800"
+  />
 </center>
 
 ## 写在最后
 
-感谢 Lynx 社区全体成员对 Lynx 3.2 版本发布的大力支持！Lynx 作为一个新开源项目，我们对其未来满怀憧憬，也迫切地期待社区成员基于 Lynx 开发的应用程序早日亮相。
+感谢 Lynx 社区全体成员对 Lynx 3.2 版本发布的支持！Lynx 作为一个新开源项目，我们对其未来满怀憧憬，也迫切地期待社区成员基于 Lynx 开发的应用程序早日亮相。
 
 未来，我们将与社区携手共进，按[规划](https://lynxjs.org/blog/lynx-open-source-roadmap-2025.html)陆续推出更多功能支持，例如新增 Input 等组件、适配鸿蒙与PC 等更多平台。在此过程中，恳请大家保持耐心并给予理解。
 

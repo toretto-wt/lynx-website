@@ -16,7 +16,7 @@ _April 29th, 2025_
 
 [More than a month ago](blog/lynx-unlock-native-for-more), we launched Lynx as an open-source project and have since gathered valuable insights and feedback from the community. Thank you for engaging with Lynx, even as we take our first steps as a new member of the open-source cross-platform ecosystem. Today, I'm pleased to share the latest updates on Lynx with all of you: Lynx 3.2 released! This release contains enhancements and features focused on refining your development experience and boosting your app’s performance.
 
-![lynx-in-3-2](/assets/lynx-3-2/lynx-3-2.png)
+![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
 
 Lynx 3.2 has updated the framework, engine, and tools. Specifically, the List component, ReactLynx testing tools, Lynx For Web, and Rspeedy tools have all been improved, making the development process more efficient and leads to a significant improvement in performance. Additionally, we've introduced exciting new features in DevTools, making it easier than ever to debug Lynx projects. With over [296 commits](https://github.com/lynx-family/lynx/releases/) from 61 contributors (including some first time contributors!) who helped enhance the open-source project through documentation and feature contributions. Although Lynx is a new member of the open-source community, it still has good community vitality and a spirit of collaboration. Let’s explore what’s new!
 
@@ -34,7 +34,7 @@ npx upgrade-rspeedy@latest
 
 #### Bundle with Rslib
 
-![Rspeedy0-9-0](/assets/lynx-3-2/Rspeedy0-9-0.png)
+![Rspeedy0-9-0](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/Rspeedy0-9-0.png)
 The `@lynx-js/rspeedy package, along with all its plugins, is now bundled with Rslib, reducing the installation size by 50%—from 118 MB to just 53 MB. See [#395](https://github.com/lynx-family/lynx-stack/pull/395) for more details.
 
 #### Upgrade to Rspack 1.3
@@ -113,13 +113,13 @@ In previous versions, the implementation used in Lynx for Web was a single-threa
 
 With the help of Workers, Lynx For Web has fully implemented multi-thread rendering, achieving high-performance comparable to Lynx Android and iOS. In the Web implementation of React shown in the figure below, the main logic runs in the Main Thread. In the multi-thread rendering design of Lynx For Web, the Main Thread is only responsible for rendering and DOM related logic. The JS logic of cards, such as data processing and VDOM Diff, is executed concurrently in workers. The more complex the JS logic is, the more obvious the performance advantages will be.
 
-![lynx-for-web-multithread](/assets/lynx-3-2/lynx-for-web-multithread.png)
+![lynx-for-web-multithread](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-for-web-multithread.png)
 
 Here’s a performance comparison in some business scenarios, Lynx For Web's multi-thread rendering achieves a 30% optimization compared to the unoptimized Web implementation of React. Meanwhile, a [test case](https://github.com/PupilTong/performance-explanation-react-vs-reactlynx) is also provided. If you are interested, you can explore based on this.
 
-| React Web                           | Lynx For Web                           |
-| ----------------------------------- | -------------------------------------- |
-| ![](/assets/lynx-3-2/react-web.png) | ![](/assets/lynx-3-2/lynx-for-web.png) |
+| React Web                                                                                                         | Lynx For Web                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/react-web.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-for-web.png) |
 
 If you want to experience the latest Lynx for Web, you can quickly configure it in your existing project dependencies:
 
@@ -151,9 +151,9 @@ Promise.resolve().then((value) => {
 });
 ```
 
-| Results of Lynx before optimization.       | Results in Chrome.                           |
-| ------------------------------------------ | -------------------------------------------- |
-| ![](/assets/lynx-3-2/lynx-test-result.png) | ![](/assets/lynx-3-2/chrome-test-result.png) |
+| Results of Lynx before optimization.                                                                                     | Results in Chrome.                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-test-result.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/chrome-test-result.png) |
 
 In your project, you can enable the Promise implementation based on queueMicrotask by using `enableMicrotaskPromisePolyfill`.
 
@@ -172,7 +172,7 @@ console series API such as `console.[count, countReset, group, groupCollapsed, g
 
 <center>
   <img
-    src="/assets/lynx-3-2/lynx-console.gif"
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-console.gif"
     width="400"
     height="400"
     align="center"
@@ -191,7 +191,7 @@ In the following example, there is a three-column grid. The first column has a f
   defaultFile="src/grid_layout/index.tsx"
   defaultEntryFile="dist/grid_layout.lynx.bundle"
   highlight="{24}"
-  img="/assets/lynx-3-2/grid-minmax.png"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/grid-minmax.png"
   entry="src/grid_layout"
 />
 
@@ -200,7 +200,7 @@ In the following example, there is a three-column grid. The first column has a f
 In the previously versions of Lynx, only text copying within text elements was supported. In more complex cases, such as long article pages, each text element represents a paragraph. In such cases, the ability to copy text across text elements is required. The Lynx 3.2 version now fully supports this ability, making the text-copying experience similar to that on the Web.
 
 <Go
-  img="/assets/lynx-3-2/cross-text-select.gif"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/cross-text-select.gif"
   example="text"
   defaultFile="src/cross_text_selection/index.tsx"
   defaultEntryFile="dist/cross_text_selection.lynx.bundle"
@@ -217,7 +217,7 @@ In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer
 
   <center>
     <img
-      src="/assets/lynx-3-2/list-batch-render.png"
+      src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-batch-render.png"
       width="800"
       height="800"
     />
@@ -226,14 +226,14 @@ In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer
 - Design of the asynchronous rendering mode for `<list>`. Multiple strategies are added to address rendering integrity issues caused by asynchronous scheduling, bringing a more extreme scrolling experience.
   <center>
     <img
-      src="/assets/lynx-3-2/list-async-render.png"
+      src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.png"
       width="800"
       height="800"
     />
   </center>
 
 <Go
-  img="/assets/lynx-3-2/list-async-render.gif"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.gif"
   example="list"
   defaultFile="src/asyncRendering/index.tsx"
   defaultEntryFile="dist/asyncRendering.lynx.bundle"
@@ -245,7 +245,7 @@ In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer
 - We've improved the [magnetic positioning capability](https://lynx.bytedance.net/api/components/built-in/list.html#item-snap) to make the paginated scrolling experience smoother. Thanks to this enhancement, developers can create an immersive information feed experience with less than 10 lines of code. Some complex interactions like carousels can also be easily implemented.
 
   <Go
-    img="/assets/lynx-3-2/list-snap.gif"
+    img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-snap.gif"
     example="list"
     defaultFile="src/horizontal-snap/index.tsx"
     defaultEntryFile="dist/horizontal-snap.lynx.bundle"
@@ -254,7 +254,7 @@ In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer
 
 - Added support for the [z-index](https://lynxjs.org/zh/api/css/properties/z-index.html) property on `<list-item>`, allowing for more flexible adjustment of the view hierarchy of list items.
   <Go
-    img="/assets/lynx-3-2/list-z-index.gif"
+    img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-z-index.gif"
     example="list"
     defaultFile="src/zIndex/index.tsx"
     defaultEntryFile="dist/zIndex.lynx.bundle"
@@ -432,7 +432,11 @@ end
 With the help of community developer [PranshuChittora ](https://github.com/PranshuChittora), the iOS Lynx Explorer App has been successfully launched, making it easier to experience Lynx. We would like to express our gratitude to Pranshu Chittora for his dedication. Meanwhile, the launch of the Android Lynx Explorer App is in progress. If you want to experience it quickly, you can download and install it from the [Release Note](https://github.com/lynx-family/lynx/releases/).
 
 <center>
-  <img src="/assets/lynx-3-2/dev-explorer.gif" width="200" height="200" />
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/dev-explorer.gif"
+    width="200"
+    height="200"
+  />
 </center>
 
 ### DevTool
@@ -442,7 +446,11 @@ As you know, there is a screencast area on the left part of DevTool, mirroring t
 Please visit the [DevTool Release](https://github.com/lynx-family/lynx-devtool/releases) to download the latest Desktop Application to experience it.
 
 <center>
-  <img src="/assets/lynx-3-2/devtools-opt.gif" width="800" height="800" />
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/devtools-opt.gif"
+    width="800"
+    height="800"
+  />
 </center>
 
 ## Conclusion
