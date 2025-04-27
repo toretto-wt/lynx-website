@@ -14,11 +14,11 @@ _April 29th, 2025_
 
 <BlogAvatar list={['shiwentao']} />
 
-[More than a month ago](blog/lynx-unlock-native-for-more), we launched Lynx as an open-source project and have since gathered valuable insights and feedback from the community. Thank you for engaging with Lynx, even as we take our first steps as a new member of the open-source cross-platform ecosystem. Today, I'm pleased to share the latest updates on Lynx with all of you: Lynx 3.2 released! This release contains enhancements and features focused on refining your development experience and boosting your app’s performance.
+[More than a month ago](blog/lynx-unlock-native-for-more), we launched Lynx as an open-source project and have since gathered valuable insights and feedback from the community. Thank you for getting involved with Lynx, even as we take our first steps as a new member of the open-source cross-platform ecosystem. Today, I'm pleased to share the latest updates on Lynx with all of you: Lynx 3.2 released! This release contains enhancements and features focused on refining your development experience and boosting your app’s performance.
 
 ![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
 
-Lynx 3.2 has updated the framework, engine, and tools. Specifically, the List component, ReactLynx testing tools, Lynx For Web, and Rspeedy tools have all been improved, making the development process more efficient and leads to a significant improvement in performance. Additionally, we've introduced exciting new features in DevTools, making it easier than ever to debug Lynx projects. With over [296 commits](https://github.com/lynx-family/lynx/releases/) from 61 contributors (including some first time contributors!) who helped enhance the open-source project through documentation and feature contributions. Although Lynx is a new member of the open-source community, it still has good community vitality and a spirit of collaboration. Let’s explore what’s new!
+Lynx 3.2 has updated the framework, engine, and tools. Specifically, the List component, ReactLynx testing tools, Lynx For Web, and Rspeedy tools have all been improved, making the development process more efficient and leads to a significant improvement in performance. Additionally, we've introduced exciting new features in DevTools, making it easier than ever to debug Lynx projects. With over [296 commits](https://github.com/lynx-family/lynx/releases/) from 61 contributors (including some first time contributors) who helped enhance the open-source project through documentation and feature contributions. Although Lynx is a new member of the open-source community, it still has good community vitality and a spirit of collaboration. Let’s explore what’s new!
 
 ## Framework
 
@@ -47,11 +47,11 @@ With the upgrade of Rspack 1.3, Rspeedy has achieved faster code splitting, smal
 
 ReactLynx Testing Library is inspired by React Testing Library. The underlying Lynx Test Environment is responsible for providing the JS implementation of the Lynx Test Environment, similar to the DOM environment provided by tools such as `jsdom`. We use `jsdom` in Lynx Test Environment to implement [Element PAPI](https://lynxjs.org/api/engine/element-api), so you can directly use tools such as [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library) and [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) to assist testing.
 
-#### Applicable scenarios
+#### Appropriate scenarios
 
 ReactLynx Testing Library is suitable for unit testing of ReactLynx components. It is based on Lynx Test Environment and `@testing-library/dom` (querying and event triggering of page elements), shielding the implementation details of Lynx dual threads, and abstracting the rendering process of ReactLynx into `render`, `fireEvent`, `screen` and other APIs similar to React Testing Library. Users can also assert the elements in the page. For example, use `data-testid` to quickly find the element, and use `toBeInTheDocument` in `@testing-library/jest-dom` to determine whether the element is in the page.
 
-#### **User Guide**
+#### User Guide
 
 - ReactLynx Testing Library is integrated into the `testing-library` subdirectory of the `@lynx-js/react` package and can be used directly. After configuring the [Vitest](https://vitest.dev/), you can start writing tests and running them.
 
@@ -456,5 +456,5 @@ Please visit the [DevTool Release](https://github.com/lynx-family/lynx-devtool/r
 ## Conclusion
 
 Thanks to the Lynx community for making this release possible! As a newly open-source project, we have high hopes for the future of Lynx. We’re excited for the future and can’t wait to see use Lynx in your apps.
-In the future, we will gradually introduce more feature support as [planned](https://lynxjs.org/blog/lynx-open-source-roadmap-2025.html). For example, we'll add new components like `<Input>` and adapt to more platforms such as HarmonyOS and PCs.
+In the future, we will gradually introduce more feature support as [planned](https://lynxjs.org/blog/lynx-open-source-roadmap-2025.html). For example, we'll add new components like `<Input>` and adapt to more platforms such as HarmonyOS and PC.
 Please check the release notes and changelog, start a new Lynx development process!
