@@ -43,7 +43,7 @@ npx upgrade-rspeedy@latest
 
 ### ReactLynx Testing Library
 
-在最新的 ReactLynx 中实现了 [ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/testing-library/react-lynx-testing-library)，它是基于 Lynx 测试环境（[`@lynx-js/test-environment`](http://10.37.80.228:3000/react/react-lynx-testing-library/lynx-test-environment.html)），为 ReactLynx 实现的一套测试解决方案。它的灵感源自 React 测试库，与 `jsdom` 等工具所提供的 DOM 环境类似，Lynx 引擎负责提供测试环境的 JavaScript 实现，基于 `jsdom` 来实现 [Element PAPI](https://lynxjs.org/api/engine/element-api)。因此可以直接使用诸如 [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library) 和 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) 等工具来辅助测试。
+在最新的 ReactLynx 中实现了 [ReactLynx Testing Library](/react/react-lynx-testing-library.html)，它是基于 Lynx 测试环境（[`@lynx-js/test-environment`](/react/react-lynx-testing-library/lynx-test-environment.html)），为 ReactLynx 实现的一套测试解决方案。它的灵感源自 React 测试库，与 `jsdom` 等工具所提供的 DOM 环境类似，Lynx 引擎负责提供测试环境的 JavaScript 实现，基于 `jsdom` 来实现 [Element PAPI](https://lynxjs.org/api/engine/element-api)。因此可以直接使用诸如 [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library) 和 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) 等工具来辅助测试。
 
 #### 适用场景
 
@@ -68,7 +68,7 @@ const config = defineConfig({
 export default mergeConfig(defaultConfig, config);
 ```
 
-- 以下是一个完整的示例，用于来做基础渲染测试的 case，更多的测试使用方式可以参考 [ReactLynx Testing Library](http://10.37.80.228:3000/react/react-lynx-testing-library/index.html)。
+- 以下是一个完整的示例，用于来做基础渲染测试的 case，更多的测试使用方式可以参考 [ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/react/testing-library/src/__tests__)。
 
 ```js
 import '@testing-library/jest-dom';
