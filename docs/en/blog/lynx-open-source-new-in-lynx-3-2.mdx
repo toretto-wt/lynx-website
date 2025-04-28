@@ -137,7 +137,7 @@ If you want to experience the latest Lynx for Web, you can quickly configure it 
 
 #### queueMicrotask
 
-Limited by the compatibility issues of the JSC version, the early versions of Lynx couldn't directly call the native `Promise` of JSC. The implementation of `Lynx Promise` adopted a polyfill solution using setTimeout to achieve asynchronous logic. This mechanism causes Promise.then() callbacks to be executed as macro-tasks, which is incompatible with the high-priority mechanism of micro-tasks in standard JavaScript. There may be situations where the execution order of asynchronous callbacks differs from that in browsers.
+Limited by the compatibility issues of the JSC version, versions 3.1 and earlier of Lynx couldn't directly call the native `Promise` of JSC. The implementation of `Lynx Promise` adopted a polyfill solution using setTimeout to achieve asynchronous logic. This mechanism causes Promise.then() callbacks to be executed as macro-tasks, which is incompatible with the high-priority mechanism of micro-tasks in standard JavaScript. There may be situations where the execution order of asynchronous callbacks differs from that in browsers.
 
 In Lynx 3.2, micro-task calls were implemented based on queueMicrotask, thus meeting the requirement for task preemption and supporting a more standard implementation of Promise. The corresponding differences in the implementation of Promise can be verified through the following code, and its behavior is inconsistent with that of mainstream browsers.
 
@@ -154,17 +154,6 @@ Promise.resolve().then((value) => {
 | Results of Lynx before optimization.                                                                                     | Results in Chrome.                                                                                                         |
 | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
 | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-test-result.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/chrome-test-result.png) |
-
-In your project, you can enable the Promise implementation based on queueMicrotask by using `enableMicrotaskPromisePolyfill`.
-
-```js
-// lynx.config.js
-module.exports = {
-  pageConfig: {
-    enableMicrotaskPromisePolyfill: true,
-  },
-};
-```
 
 #### console series API
 
@@ -237,6 +226,7 @@ In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer
   example="list"
   defaultFile="src/async-rendering/index.tsx"
   defaultEntryFile="dist/async-rendering.lynx.bundle"
+  highlight="{16}"
   entry="src/async-rendering"
 />
 
@@ -249,6 +239,7 @@ In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer
     example="list"
     defaultFile="src/horizontal-snap/index.tsx"
     defaultEntryFile="dist/horizontal-snap.lynx.bundle"
+    highlight="{26}"
     entry="src/horizontal-snap"
   />
 
@@ -258,6 +249,7 @@ In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer
     example="list"
     defaultFile="src/zIndex/index.tsx"
     defaultEntryFile="dist/zIndex.lynx.bundle"
+    highlight="{22}"
     entry="src/zIndex"
   />
 

@@ -133,7 +133,7 @@ it('basic render', () => {
 
 #### 支持 queueMicrotask
 
-受限于 iOS JSC 版本兼容性问题，Lynx 早期版本无法直接调用 JSC 原生 `Promise`，Lynx `Promise` 实现采用`setTimeout`实现异步逻辑的 polyfill 方案。这一机制导致 `Promise.then()` 回调以宏任务形式执行，与标准 JS 中微任务的高优先级机制不兼容，可能出现异步回调执行顺序与浏览器不一致的问题。在 Lynx 3.2 中基于实现 queueMicrotask 实现了微任务调用，从而实现任务插队需求，支持更为标准的 Promise。相应的 Promise 的实现差异，可以通过以下代码来验证，其行为与主流浏览器不一致。
+受限于 iOS JSC 版本兼容性问题，Lynx 3.1及之前版本无法直接调用 JSC 原生 `Promise`，Lynx `Promise` 实现采用`setTimeout`实现异步逻辑的 polyfill 方案。这一机制导致 `Promise.then()` 回调以宏任务形式执行，与标准 JS 中微任务的高优先级机制不兼容，可能出现异步回调执行顺序与浏览器不一致的问题。在 Lynx 3.2 中基于实现 queueMicrotask 实现了微任务调用，从而实现任务插队需求，支持更为标准的 Promise。相应的 Promise 的实现差异，可以通过以下代码来验证，其行为与主流浏览器不一致。
 
 ```js
 setTimeout(() => {
@@ -148,17 +148,6 @@ Promise.resolve().then((value) => {
 | 优化前 Lynx 运行结果                                                                                                     | Chrome 运行结果                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
 | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-test-result.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/chrome-test-result.png) |
-
-在您的项目中可通过 `enableMicrotaskPromisePolyfill`来开启基于 queueMicrotask 的 `Promise` 实现。
-
-```js
-// lynx.config.js
-module.exports = {
-  pageConfig: {
-    enableMicrotaskPromisePolyfill: true,
-  },
-};
-```
 
 #### console 系列 API 完善
 
@@ -233,6 +222,7 @@ module.exports = {
   example="list"
   defaultFile="src/async-rendering/index.tsx"
   defaultEntryFile="dist/async-rendering.lynx.bundle"
+  highlight="{16}"
   entry="src/async-rendering"
 />
 
@@ -245,6 +235,7 @@ module.exports = {
   example="list"
   defaultFile="src/horizontal-snap/index.tsx"
   defaultEntryFile="dist/horizontal-snap.lynx.bundle"
+  highlight="{26}"
   entry="src/horizontal-snap"
 />
 
@@ -255,6 +246,7 @@ module.exports = {
   example="list"
   defaultFile="src/zIndex/index.tsx"
   defaultEntryFile="dist/zIndex.lynx.bundle"
+  highlight="{22}"
   entry="src/zIndex"
 />
 
