@@ -964,6 +964,15 @@ packages:
       '@lynx-js/types':
         optional: true
 
+  '@lynx-js/react@0.106.3':
+    resolution: {integrity: sha512-RTL8MDaSShwBWtPO3qfiSr+RaN3lDdxoEbqAORn+W4wh/xMO1ex8HKcS9EOvEhEFsZA6VN0t7zHDgrotrvwd/g==}
+    peerDependencies:
+      '@lynx-js/types': '*'
+      '@types/react': ^18
+    peerDependenciesMeta:
+      '@lynx-js/types':
+        optional: true
+
   '@mdn/minimalist@2.0.4':
     resolution: {integrity: sha512-jocePw/fsGcBxO67D+iWQLZ0TQjwNVonaME2BFN98QIm/e1kTY1/k2s4fOqH5MMa3QYURxa098bI4sChn6s/7Q==}
 
@@ -5797,6 +5806,11 @@ snapshots:
       - '@types/react'
 
   '@lynx-js/react@0.107.0(@types/react@18.3.18)':
+    dependencies:
+      '@types/react': 18.3.18
+      preact: '@hongzhiyuan/preact@10.24.0-319c684e'
+
+  '@lynx-js/react@0.106.3(@types/react@18.3.18)':
     dependencies:
       '@types/react': 18.3.18
       preact: '@hongzhiyuan/preact@10.24.0-319c684e'

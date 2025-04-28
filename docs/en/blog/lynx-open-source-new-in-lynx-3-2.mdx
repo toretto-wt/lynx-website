@@ -1,0 +1,452 @@
+---
+date: 2025-04-29
+sidebar: false
+---
+
+import { BlogAvatar, CodeFold } from '@lynx';
+import { PackageManagerTabs } from '@theme';
+import { Go } from '@lynx';
+import { Tab, Tabs } from 'rspress/theme';
+
+_April 29th, 2025_
+
+# What’s new in Lynx 3.2
+
+<BlogAvatar list={['shiwentao']} />
+
+[March, 2025](blog/lynx-unlock-native-for-more) we launched [Lynx](https://github.com/lynx-family/lynx) as an open-source project and have since gathered valuable insights and feedback from the community. Thank you for getting involved with Lynx, even as we take our first steps as a new member of the open-source cross-platform ecosystem. Today, I'm pleased to share the latest updates on Lynx with all of you: Lynx 3.2 released! This release contains enhancements and features focused on refining your development experience and boosting your app’s performance.
+
+![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
+
+Lynx 3.2 has updated the framework, engine, and tools. Specifically, the List component, ReactLynx testing tools, Lynx For Web, and Rspeedy tools have all been improved, making the development process more efficient and leads to a significant improvement in performance. Additionally, we've introduced exciting new features in DevTools, making it easier than ever to debug Lynx projects. With over [296 commits](https://github.com/lynx-family/lynx/releases/) from 61 contributors (including some first time contributors) who helped enhance the open-source project through documentation and feature contributions. Although Lynx is a new member of the open-source community, it still has good community vitality and a spirit of collaboration. Let’s explore what’s new!
+
+## Framework
+
+### RSpeedy
+
+Rspeedy [v0.9.0](https://github.com/lynx-family/lynx-stack/discussions/482) has been released. In v0.9.0 Rspeedy bundles with [Rslib](https://lib.rsbuild.dev/), slashing the installation size by 50%. And upgrade to [Rspack](https://rspack.dev/) [1.3](https://rspack.dev/blog/announcing-1-3) offers enhanced features such as quicker code splitting, a smaller bundle size, reduced memory consumption. Additionally, the release includes other enhancements like new CLI flags, configurations. For a comprehensive overview of these changes, explore the full CHANGELOG [`@lynx-js/rspeedy v0.9.0`](https://github.com/lynx-family/lynx-stack/blob/main/packages/rspeedy/core/CHANGELOG.md#090)
+
+Upgrade now using the following command in your Rspeedy project:
+
+```js
+npx upgrade-rspeedy@latest
+```
+
+#### Bundle with Rslib
+
+![Rspeedy0-9-0](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/Rspeedy0-9-0.png)
+The `@lynx-js/rspeedy package, along with all its plugins, is now bundled with Rslib, reducing the installation size by 50%—from 118 MB to just 53 MB. See [#395](https://github.com/lynx-family/lynx-stack/pull/395) for more details.
+
+#### Upgrade to Rspack 1.3
+
+With the upgrade of Rspack 1.3, Rspeedy has achieved faster code splitting, smaller package size, lower memory consumption, and added the [CircularDependencyRspackPlugin](https://rspack.dev/plugins/rspack/circular-dependency-rspack-plugin) (which detects circular import dependencies between runtime modules). See [Announcing Rspack 1.3](https://rspack.dev/blog/announcing-1-3) for more details.
+
+### ReactLynx Testing Library
+
+[ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/testing-library/react-lynx-testing-library) implements a set of testing solutions for ReactLynx components based on [Lynx Test Environment (@lynx-js/test-environment, JS implementation of Lynx)](http://10.37.80.228:3000/react/react-lynx-testing-library/lynx-test-environment.html).
+
+ReactLynx Testing Library is inspired by React Testing Library. The underlying Lynx Test Environment is responsible for providing the JS implementation of the Lynx Test Environment, similar to the DOM environment provided by tools such as `jsdom`. We use `jsdom` in Lynx Test Environment to implement [Element PAPI](https://lynxjs.org/api/engine/element-api), so you can directly use tools such as [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library) and [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) to assist testing.
+
+#### Appropriate scenarios
+
+ReactLynx Testing Library is suitable for unit testing of ReactLynx components. It is based on Lynx Test Environment and `@testing-library/dom` (querying and event triggering of page elements), shielding the implementation details of Lynx dual threads, and abstracting the rendering process of ReactLynx into `render`, `fireEvent`, `screen` and other APIs similar to React Testing Library. Users can also assert the elements in the page. For example, use `data-testid` to quickly find the element, and use `toBeInTheDocument` in `@testing-library/jest-dom` to determine whether the element is in the page.
+
+#### User Guide
+
+- ReactLynx Testing Library is integrated into the `testing-library` subdirectory of the `@lynx-js/react` package and can be used directly. After configuring the [Vitest](https://vitest.dev/), you can start writing tests and running them.
+
+```js
+// vitest.config.js
+import { defineConfig, mergeConfig } from 'vitest/config';
+import { createVitestConfig } from '@lynx-js/react/testing-library/vitest-config';
+
+const defaultConfig = createVitestConfig();
+const config = defineConfig({
+  test: {
+    // ...
+  },
+});
+
+export default mergeConfig(defaultConfig, config);
+```
+
+- Here is a complete example of a basic rendering test case. For more testing usage methods, see [ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/testing-library/react-lynx-testing-library) for more details.
+
+```js
+import '@testing-library/jest-dom';
+import { expect, it } from 'vitest';
+import { render } from '@lynx-js/react/testing-library';
+
+it('basic render', () => {
+  const WrapperComponent = ({ children }) => (
+    <view data-testid="wrapper">{children}</view>
+  );
+  const Comp = () => {
+    return <view data-testid="inner" style="background-color: yellow;" />;
+  };
+  const { container, getByTestId } = render(<Comp />, {
+    wrapper: WrapperComponent,
+  });
+  // Since Lynx Test Environment uses jsdom to implement Element PAPI at the bottom layer
+  // you can use the method in `@testing-library/jest-dom` to assert whether the page element exists
+  expect(getByTestId('wrapper')).toBeInTheDocument();
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <view
+      data-testid="wrapper"
+    >
+      <view
+        data-testid="inner"
+        style="background-color: yellow;"
+      />
+    </view>
+  `);
+});
+```
+
+### Lynx For Web
+
+[Lynx for Web](https://github.com/lynx-family/lynx-stack/tree/main/packages/web-platform) is an implementation of Lynx's native binding APIs based on Browser APIs. In this way, Lynx for Web can help Lynx expand to more platforms, such as desktops, TVs, or Internet of Things (IoT) devices.
+
+In previous versions, the implementation used in Lynx for Web was a single-threaded version. In the [0.12.0](https://www.npmjs.com/package/@lynx-js/web-core/v/0.12.0) version, Rspack Worker capabilities will be used to create Workers, thereby achieving multi-threaded rendering and truly delivering high performance similar to Lynx Android and iOS. In real project experience, the rendering performance has been improved by 30%.
+
+#### MultiThread Render
+
+With the help of Workers, Lynx For Web has fully implemented multi-thread rendering, achieving high-performance comparable to Lynx Android and iOS. In the Web implementation of React shown in the figure below, the main logic runs in the Main Thread. In the multi-thread rendering design of Lynx For Web, the Main Thread is only responsible for rendering and DOM related logic. The JS logic of cards, such as data processing and VDOM Diff, is executed concurrently in workers. The more complex the JS logic is, the more obvious the performance advantages will be.
+
+![lynx-for-web-multithread](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-for-web-multithread.png)
+
+Here’s a performance comparison in some business scenarios, Lynx For Web's multi-thread rendering achieves a 30% optimization compared to the unoptimized Web implementation of React. Meanwhile, a [test case](https://github.com/PupilTong/performance-explanation-react-vs-reactlynx) is also provided. If you are interested, you can explore based on this.
+
+| React Web                                                                                                         | Lynx For Web                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/react-web.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-for-web.png) |
+
+If you want to experience the latest Lynx for Web, you can quickly configure it in your existing project dependencies:
+
+```js
+"dependencies": {
+    "@lynx-js/web-core": "^0.12.0",
+    "@lynx-js/web-elements": "^0.12.0",
+  },
+ }
+```
+
+## Engine
+
+### JS Runtime
+
+#### queueMicrotask
+
+Limited by the compatibility issues of the JSC version, versions 3.1 and earlier of Lynx couldn't directly call the native `Promise` of JSC. The implementation of `Lynx Promise` adopted a polyfill solution using setTimeout to achieve asynchronous logic. This mechanism causes Promise.then() callbacks to be executed as macro-tasks, which is incompatible with the high-priority mechanism of micro-tasks in standard JavaScript. There may be situations where the execution order of asynchronous callbacks differs from that in browsers.
+
+In Lynx 3.2, micro-task calls were implemented based on queueMicrotask, thus meeting the requirement for task preemption and supporting a more standard implementation of Promise. The corresponding differences in the implementation of Promise can be verified through the following code, and its behavior is inconsistent with that of mainstream browsers.
+
+```js
+setTimeout(() => {
+  console.log('this is a timeout, will exec after');
+}, 0);
+
+Promise.resolve().then((value) => {
+  console.log('this is a Promise, will exec before');
+});
+```
+
+| Results of Lynx before optimization.                                                                                     | Results in Chrome.                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-test-result.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/chrome-test-result.png) |
+
+#### console series API
+
+console series API such as `console.[count, countReset, group, groupCollapsed, groupEnd, time, timeLog, timeEnd]` have been added, which are implemented in alignment with the [W3C standard](https://developer.mozilla.org/en-US/docs/Web/API/console). You can debug in the Lynx DevTool console.
+
+<center>
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-console.gif"
+    width="400"
+    height="400"
+    align="center"
+  />
+</center>
+
+### Capability Enhancement
+
+#### Grid Layout
+
+To resolve some difficulty in determining track sizes when using [Grid Layout](https://lynxjs.org/guide/ui/layout/grid-layout.html), Lynx 3.2 has introduced the W3C - standard layout keywords `minmax()`,`max-content`,`fit-content`minmax(), max - content, and fit - content in Grid track styles. These keywords can be used in conjunction with `grid-template-columns`, `grid-template-rows`, `grid-auto-columns`, and `grid-auto-rows` to help more precisely determine the size of the Grid container.
+In the following example, there is a three-column grid. The first column has a fixed size of 20% of the container's width. The second column is sized according to its maximum content. The third column requires a minimum width of 50px for display and can expand to fit its maximum content, ultimately being restricted by the container. We can use `grid-template-columns: 20% max-content minmax(50px, max-content)` to achieve this layout.
+
+<Go
+  example="css"
+  defaultFile="src/grid_layout/index.tsx"
+  defaultEntryFile="dist/grid_layout.lynx.bundle"
+  highlight="{24}"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/grid-minmax.png"
+  entry="src/grid_layout"
+/>
+
+#### Text Select
+
+In the previously versions of Lynx, only text copying within text elements was supported. In more complex cases, such as long article pages, each text element represents a paragraph. In such cases, the ability to copy text across text elements is required. The Lynx 3.2 version now fully supports this ability, making the text-copying experience similar to that on the Web.
+
+<Go
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/cross-text-select.gif"
+  example="text"
+  defaultFile="src/cross_text_selection/index.tsx"
+  defaultEntryFile="dist/cross_text_selection.lynx.bundle"
+  entry="src/cross_text_selection"
+/>
+
+### `<list>` Element
+
+In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer a better development experience. Additionally, we've conducted in-depth optimizations on its first-screen rendering and scrolling performance, enabling the `<list>` to deliver even better performance.
+
+#### Performance Optimization
+
+- Multi-threaded batch rendering of child nodes: By asynchronously parsing attributes and adjusting the tree structure of subtrees, the overall time consumption for batch rendering nodes is optimized, improving the rendering performance of the `<list>` during first-screen loading or data updates. Some complex pages show that the first-screen performance has been improved by over 20%.
+
+  <center>
+    <img
+      src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-batch-render.png"
+      width="800"
+      height="800"
+    />
+  </center>
+
+- Design of the asynchronous rendering mode for `<list>`. Multiple strategies are added to address rendering integrity issues caused by asynchronous scheduling, bringing a more extreme scrolling experience.
+  <center>
+    <img
+      src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.png"
+      width="800"
+      height="800"
+    />
+  </center>
+
+<Go
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.gif"
+  example="list"
+  defaultFile="src/async-rendering/index.tsx"
+  defaultEntryFile="dist/async-rendering.lynx.bundle"
+  highlight="{16}"
+  entry="src/async-rendering"
+/>
+
+#### Feature Update
+
+- We've improved the [magnetic positioning capability](https://lynx.bytedance.net/api/components/built-in/list.html#item-snap) to make the paginated scrolling experience smoother. Thanks to this enhancement, developers can create an immersive information feed experience with less than 10 lines of code. Some complex interactions like carousels can also be easily implemented.
+
+  <Go
+    img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-snap.gif"
+    example="list"
+    defaultFile="src/horizontal-snap/index.tsx"
+    defaultEntryFile="dist/horizontal-snap.lynx.bundle"
+    highlight="{26}"
+    entry="src/horizontal-snap"
+  />
+
+- Added support for the [z-index](https://lynxjs.org/zh/api/css/properties/z-index.html) property on `<list-item>`, allowing for more flexible adjustment of the view hierarchy of list items.
+  <Go
+    img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-z-index.gif"
+    example="list"
+    defaultFile="src/zIndex/index.tsx"
+    defaultEntryFile="dist/zIndex.lynx.bundle"
+    highlight="{22}"
+    entry="src/zIndex"
+  />
+
+### Integration Guides
+
+#### Android
+
+Refer to [integrate-with-existing-apps](https://lynxjs.org/guide/start/integrate-with-existing-apps.html#platform=ios), update the dependency versions of Lynx and LynxService.
+
+##### Update Lynx Version
+
+In the `build.gradle` or `build.gradle.kts` file of the project, upgrade the version:
+
+<Tabs groupId='update-lynx-3-2-with-existing-app'>
+<Tab label="build.gradle">
+
+```groovy title=build.gradle {3-6}
+dependencies {
+    // lynx dependencies
+    implementation "org.lynxsdk.lynx:lynx:3.2.0"
+    implementation "org.lynxsdk.lynx:lynx-jssdk:3.2.0"
+    implementation "org.lynxsdk.lynx:lynx-trace:3.2.0"
+    implementation "org.lynxsdk.lynx:primjs:2.12.0"
+}
+```
+
+</Tab>
+<Tab label="build.gradle.kts">
+
+```groovy title=build.gradle.kts {3-6}
+dependencies {
+    // lynx dependencies
+    implementation("org.lynxsdk.lynx:lynx:3.2.00")
+    implementation("org.lynxsdk.lynx:lynx-jssdk:3.2.0")
+    implementation("org.lynxsdk.lynx:lynx-trace:3.2.0")
+    implementation("org.lynxsdk.lynx:primjs:2.12.0")
+}
+```
+
+</Tab>
+</Tabs>
+
+##### Update LynxService Version
+
+In the `build.gradle` or `build.gradle.kts` file of the project, upgrade the version:
+
+<Tabs groupId='update-lynx-3-2-with-existing-app'>
+<Tab label="build.gradle">
+<CodeFold height={360} toggle>
+```groovy title=build.gradle {8-24}
+dependencies {
+    // lynx dependencies
+    implementation "org.lynxsdk.lynx:lynx:3.2.0"
+    implementation "org.lynxsdk.lynx:lynx-jssdk:3.2.0"
+    implementation "org.lynxsdk.lynx:lynx-trace:3.2.0"
+    implementation "org.lynxsdk.lynx:primjs:2.12.0"
+
+    // integrating image-service
+    implementation "org.lynxsdk.lynx:lynx-service-image:3.2.0"
+
+    // image-service dependencies, if not added, images cannot be loaded; if the host APP needs to use other image libraries, you can customize the image-service and remove this dependency
+    implementation "com.facebook.fresco:fresco:2.3.0"
+    implementation "com.facebook.fresco:animated-gif:2.3.0"
+    implementation "com.facebook.fresco:animated-webp:2.3.0"
+    implementation "com.facebook.fresco:webpsupport:2.3.0"
+    implementation "com.facebook.fresco:animated-base:2.3.0"
+
+    // integrating log-service
+    implementation "org.lynxsdk.lynx:lynx-service-log:3.2.0"
+
+    // integrating http-service
+    implementation "org.lynxsdk.lynx:lynx-service-http:3.2.0"
+
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+
+}
+
+````
+</CodeFold>
+</Tab>
+
+<Tab label="build.gradle.kts">
+<CodeFold height={360} toggle>
+```groovy title=build.gradle.kts {8-24}
+dependencies {
+    // lynx dependencies
+    implementation("org.lynxsdk.lynx:lynx:3.2.0")
+    implementation("org.lynxsdk.lynx:lynx-jssdk:3.2.0")
+    implementation("org.lynxsdk.lynx:lynx-trace:3.2.0")
+    implementation("org.lynxsdk.lynx:primjs:2.12.0")
+
+    // integrating image-service
+    implementation("org.lynxsdk.lynx:lynx-service-image:3.2.0-")
+
+    // image-service dependencies, if not added, images cannot be loaded; if the host APP needs to use other image libraries, you can customize the image-service and remove this dependency
+    implementation("com.facebook.fresco:fresco:2.3.0")
+    implementation("com.facebook.fresco:animated-gif:2.3.0")
+    implementation("com.facebook.fresco:animated-webp:2.3.0")
+    implementation("com.facebook.fresco:webpsupport:2.3.0")
+    implementation("com.facebook.fresco:animated-base:2.3.0")
+
+    // integrating log-service
+    implementation("org.lynxsdk.lynx:lynx-service-log:3.2.0")
+
+    // integrating http-service
+    implementation("org.lynxsdk.lynx:lynx-service-http:3.2.0")
+
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+}
+````
+
+</CodeFold>
+</Tab>
+</Tabs>
+
+#### iOS
+
+##### Update Lynx Version
+
+In the `Podfile` file of the project, upgrade the version:
+
+<CodeFold height={360} toggle>
+```ruby title="Podfile" {1,6-8,10}
+source 'https://cdn.cocoapods.org/'
+
+platform :ios, '10.0'
+
+target 'YourTarget' do
+pod 'Lynx', '3.2.0', :subspecs => [
+'Framework',
+]
+
+pod 'PrimJS', '2.12.0', :subspecs => ['quickjs', 'napi']
+end
+
+````
+</CodeFold>
+
+##### Update LynxService Version
+
+In the `Podfile` file of the project, upgrade the version:
+
+<CodeFold height={360} toggle>
+```ruby title="Podfile" {8-13,15-17}
+source 'https://cdn.cocoapods.org/'
+platform :ios, '10.0'
+target 'YourTarget' do
+  pod 'Lynx', '3.2.0', :subspecs => [
+    'Framework',
+  ]
+  pod 'PrimJS', '2.12.0', :subspecs => ['quickjs', 'napi']
+  # integrate image-service, log-service, and http-service
+  pod 'LynxService', '3.2.0', :subspecs => [
+      'Image',
+      'Log',
+      'Http',
+  ]
+
+  # ImageService
+  pod 'SDWebImage','5.15.5'
+  pod 'SDWebImageWebPCoder', '0.11.0'
+
+end
+````
+
+</CodeFold>
+
+## Tools
+
+### DEV Explorer
+
+With the help of community developer [Pranshu Chittora ](https://github.com/PranshuChittora), the iOS Lynx Explorer App has been successfully launched on App Store, making it easier to experience Lynx. We would like to express our gratitude to Pranshu Chittora for his dedication. Meanwhile, the launch of the Android Lynx Explorer App is in progress. If you want to experience it quickly, you can download and install it from the [Release Note](https://github.com/lynx-family/lynx/releases/).
+
+<center>
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/dev-explorer.gif"
+    width="200"
+    height="200"
+  />
+</center>
+
+### DevTool
+
+As you know, there is a screencast area on the left part of DevTool, mirroring the Lynx page on your device. You now have a switch to change the resolution to High Definition or Standard Definition. When the device connection is not stable, you can use SD mode to reduce data transmission bandwidth, which tends to be smoother.
+
+Please visit the [DevTool Release](https://github.com/lynx-family/lynx-devtool/releases) to download the latest Desktop Application to experience it.
+
+<center>
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/devtools-opt.gif"
+    width="800"
+    height="800"
+  />
+</center>
+
+## Conclusion
+
+Thanks to the Lynx community for making this release possible! As a newly open-source project, we have high hopes for the future of Lynx. We’re excited for the future and can’t wait to see use Lynx in your apps.
+In the future, we will gradually introduce more feature support as [planned](https://lynxjs.org/blog/lynx-open-source-roadmap-2025.html). For example, we'll add new components like `<Input>` and adapt to more platforms such as HarmonyOS and PC.
+Please check the release notes and changelog, start a new Lynx development process!
