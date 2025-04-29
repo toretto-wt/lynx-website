@@ -8,7 +8,7 @@ import { PackageManagerTabs } from '@theme';
 import { Go } from '@lynx';
 import { Tab, Tabs } from 'rspress/theme';
 
-_2025 年 4 月 29 日_
+_2025 年 4 月 30 日_
 
 # Lynx 3.2 发布公告
 
@@ -18,7 +18,111 @@ _2025 年 4 月 29 日_
 
 ![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
 
-Lynx 3.2 对框架、引擎和工具进行了全面更新。其中，List 元件、ReactLynx 测试工具、Lynx for Web 以及 Rspeedy 工具均得到了改进，使得开发过程更加高效，性能也有了显著提升。值得一提的是，Lynx 3.2 拥有来自 61 位贡献者的超过 [296 次提交](https://github.com/lynx-family/lynx/releases/)；其中包含许多外部开发者，在文档、工具、功能上对 Lynx 开源给予很大的帮助；Lynx 作为开源领域的新成员，具备不错的社区活力和协作精神，同时未来还有很大的进步空间。让我们一起开始探索吧！
+Lynx 3.2 对引擎、框架和工具进行了全面更新。其中，`List` 元件、Grid 布局、跨文本选择、Rspeedy 工具、ReactLynx 测试工具、Lynx for Web 以及 DevTool 均得到了改进，使得开发过程更加高效，性能也有了显著提升。值得一提的是，Lynx 3.2 拥有来自 61 位贡献者的超过 [296 次提交](https://github.com/lynx-family/lynx/releases/)；其中包含许多社区开发者，在文档、工具、功能上对 Lynx 开源给予很大的帮助。现在，让我们一起开始探索吧！
+
+## 引擎
+
+### `<list>` 元件
+
+Lynx 3.2 中对 `<list>` 元件的功能做了完善以提供更好的开发体验，同时还对其首屏、滚动做了深度的优化，使得 `<list>` 具备更加优秀的性能表现。
+
+- **功能更新**
+
+1. 完善[**磁吸定位能力**](https://lynx.bytedance.net/api/components/built-in/list.html#item-snap)，使分页滚动体验更加顺畅。基于这一改进，开发者可以更便捷的构建沉浸式的信息流体验，跑马灯这类需要精确控制位移的复杂交互也能轻松实现
+
+<Go
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-snap.gif"
+  example="list"
+  defaultFile="src/horizontal-snap/index.tsx"
+  defaultEntryFile="dist/horizontal-snap.lynx.bundle"
+  highlight="{26}"
+  entry="src/horizontal-snap"
+/>
+
+2. 增加对 `<list-item>` 上 [**z-index**](https://lynxjs.org/zh/api/css/properties/z-index.html) 的支持，能够更方便的调整列表项的视图层级
+
+<Go
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-z-index.gif"
+  example="list"
+  defaultFile="src/zIndex/index.tsx"
+  defaultEntryFile="dist/zIndex.lynx.bundle"
+  highlight="{22}"
+  entry="src/zIndex"
+/>
+
+- **性能优化**
+
+1. 多线程配合子节点的**批量渲染**，优化渲染节点的整体耗时，从而提升 `<list>` 首屏或者数据更新时的渲染性能。
+
+2. `<list>` **异步渲染模式**的优化，增加多种策略来解决异步调度产生渲染完整性问题，带来更好的滚动体验。
+
+<Go
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.gif"
+  example="list"
+  defaultFile="src/async-rendering/index.tsx"
+  defaultEntryFile="dist/async-rendering.lynx.bundle"
+  highlight="{16}"
+  entry="src/async-rendering"
+/>
+
+### Grid 布局能力增强
+
+为解决在使用 [Grid](https://lynxjs.org/guide/ui/layout/grid-layout.html) 布局遇到难以确定轨道尺寸的问题，Lynx 3.2 中在 Grid 轨道样式中引入 W3C 标准的布局关键字 `minmax()`、`max-content`、`fit-content`，配和在 `grid-template-columns`、`grid-template-rows`、`grid-auto-columns`、`grid-auto-rows` 中使用，帮助更精确确定 Grid 容器的尺寸。
+
+以下示例中，有一个三列的网格，第一列展示固定大小为容器宽度的 20%、第二列第二列根据最大内容来展示、第三列最小需要 50px 宽度展示，最大是可以填充到最大的内容展示，最终受容器限制。我们可以使用 `grid-template-columns: 20% max-content minmax(50px, max-content)` 来实现这一布局。
+
+<Go
+  example="css"
+  defaultFile="src/grid_layout/index.tsx"
+  defaultEntryFile="dist/grid_layout.lynx.bundle"
+  highlight="{24}"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/grid-minmax.png"
+  entry="src/grid_layout"
+/>
+
+### 跨文本选择
+
+在某些复杂情况下，例如较长的文章页面，每个文本元素都代表一个段落，需要跨文本元素复制文本的功能。Lynx 3.2 版本完成支持了跨文本选择能力，使文本复制体验接近 Web。
+
+<Go
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/cross-text-select.gif"
+  example="text"
+  defaultFile="src/cross_text_selection/index.tsx"
+  defaultEntryFile="dist/cross_text_selection.lynx.bundle"
+  highlight="{28}"
+  entry="src/cross_text_selection"
+/>
+
+### 基于 `lynx.queueMicrotask` 实现的 `Promise`
+
+Lynx 3.2 中实现了微任务调用 API `lynx.queueMicrotask`，从而实现任务插队需求；基于此，支持了更为标准的 `Promise`。相应的 `Promise` 的执行差异，可以通过以下代码来验证，非基于 `lynx.queueMicrotask` 实现的 `Promise` （ 3.2 之前的版本）与主流浏览器不一致。
+
+```js
+setTimeout(() => {
+  console.log('this is a timeout, will exec after');
+}, 0);
+
+Promise.resolve().then((value) => {
+  console.log('this is a Promise, will exec before');
+});
+```
+
+| 3.2 之前 Lynx 运行结果                                                                                                   | Chrome 运行结果                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-test-result.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/chrome-test-result.png) |
+
+### console 系列 API 完善
+
+Lynx 3.2 新增 console.[count、countReset、group、groupCollapsed、groupEnd、time、timeLog、timeEnd] API ，对齐 [W3C 标准](https://developer.mozilla.org/en-US/docs/Web/API/console)的实现，可在 Lynx DevTool 控制台查看相关内容。
+
+<center>
+  <img
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-console.gif"
+    width="400"
+    height="400"
+    align="center"
+  />
+</center>
 
 ## Rspeedy: Rslib and Rspack 1.3
 
@@ -30,26 +134,27 @@ Rspeedy [v0.9.0](https://github.com/lynx-family/lynx-stack/discussions/482) 已�
 npx upgrade-rspeedy@latest
 ```
 
-### 使用 Rslib Bundle
+- **使用 Rslib Bundle**
 
 ![Rspeedy0-9-0](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/Rspeedy0-9-0.png)
+
 `@lynx-js/rspeedy` 包及其所有插件现已使用 Rslib 打包，线下测试安装大小从 118 MB 减少到仅 53 MB，降幅达 50%。更多详细信息请查看 [#395](https://github.com/lynx-family/lynx-stack/pull/395)。
 
-### Rspack 升级到 1.3
+- **Rspack 升级到 1.3**
 
 借助 Rspack 升级，让 Rspeedy 具备更快的代码拆分、更小的打包体积、更低的内存消耗以及新增[CircularDependencyRspackPlugin](https://rspack.dev/plugins/rspack/circular-dependency-rspack-plugin)（检测运行时模块之间的循环导入依赖关系），更多信息参考 [Announcing Rspack 1.3](https://rspack.dev/blog/announcing-1-3)。
 
 ## ReactLynx Testing Library
 
-在最新的 ReactLynx 中实现了 [ReactLynx Testing Library](/react/react-lynx-testing-library/index)，它是基于 Lynx 测试环境（[`@lynx-js/test-environment`](/react/react-lynx-testing-library/lynx-test-environment.html)），为 ReactLynx 实现的一套测试解决方案。它的灵感源自 React 测试库，与 `jsdom` 等工具所提供的 DOM 环境类似，Lynx 引擎负责提供测试环境的 JavaScript 实现，基于 `jsdom` 来实现 [Element PAPI](https://lynxjs.org/api/engine/element-api)。因此可以直接使用诸如 [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library) 和 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) 等工具来辅助测试。
+在最新的 ReactLynx 中实现了 [ReactLynx Testing Library](/react/react-lynx-testing-library/index)，它是基于 Lynx 测试环境（[`@lynx-js/test-environment`](/react/react-lynx-testing-library/lynx-test-environment.html)），为 ReactLynx 实现的一套测试解决方案。整体基于 `jsdom` 来实现 [Element PAPI](https://lynxjs.org/api/engine/element-api)，可以直接使用诸如 [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library) 和 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) 等工具来辅助测试。
 
-### 适用场景
+- **适用场景**
 
-ReactLynx Testing Library 适用于对 ReactLynx 组件进行单元测试。基于 `@testing-library/dom`（用于页面元素的查询和事件触发），屏蔽了 Lynx 双线程的实现细节，并将 ReactLynx 的渲染过程抽象成与 React 测试库类似的 API，如 `render`等。用户还可以对页面中的元素进行断言，例如使用 `@testing-library/jest-dom` 中的 `toBeInTheDocument` 来判断元素是否存在于页面中。
+ReactLynx Testing Library 适用于对 ReactLynx 组件进行单元测试。基于 `@testing-library/dom`（用于页面元素的查询和事件触发），将 ReactLynx 的渲染过程抽象成与标准测试库类似的 API，如 `render`等。用户还可以对页面中的元素进行断言，例如使用 `@testing-library/jest-dom` 中的 `toBeInTheDocument` 来判断元素是否存在于页面中。
 
-### 使用指南
+- **使用指南**
 
-- ReactLynx Testing Library 已集成到 [`@lynx-js/react`](https://www.npmjs.com/package/@lynx-js/react) 包的 `testing-library` 子目录中，可直接使用。之后配置 [Vitest](https://vitest.dev/) 测试框架，您就可以开始编写测试并运行它们了。
+1. ReactLynx Testing Library 已集成到 [`@lynx-js/react`](https://www.npmjs.com/package/@lynx-js/react) 包的 `testing-library` 子目录中，可直接使用。之后配置 [Vitest](https://vitest.dev/) 测试框架，您就可以开始编写测试并运行它们了。
 
 ```js
 // vitest.config.js
@@ -66,7 +171,7 @@ const config = defineConfig({
 export default mergeConfig(defaultConfig, config);
 ```
 
-- 以下是一个完整的示例，用于来做基础渲染测试的 case，更多的测试使用方式可以参考 [ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/react/testing-library/src/__tests__)。
+2. 以下是一个完整的示例，用于来做基础渲染测试的 case，更多的测试使用方式可以参考 [ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/react/testing-library/src/__tests__)。
 
 ```js
 import '@testing-library/jest-dom';
@@ -103,7 +208,7 @@ it('basic render', () => {
 
 [Lynx for Web](https://github.com/lynx-family/lynx-stack/tree/main/packages/web-platform) 是基于浏览器 API 来模拟实现 Lynx，最终将 Lynx 代码运行到浏览器一种方式。通过这种方式，Lynx for Web 能够帮助 Lynx 扩展到更多平台，如桌面设备、电视或物联网（IoT）设备。在 Lynx for Web [0.12.0](https://www.npmjs.com/package/@lynx-js/web-core/v/0.12.0) 版本中，借助 Rspack Worker 能力创建 Worker，完整实现了 Lynx for Web 多线程渲染，达到与 Lynx Android 和 iOS 相近的高性能表现。
 
-### Multi-Thread Render
+- **Multi-Thread Render**
 
 在 Lynx for Web 多线程渲染设计中，Main Thread 只执行渲染、DOM相关逻辑。卡片的 JS 逻辑，如数据处理、VDOM Diff 在 Worker 中并发执行，这样 JS 逻辑越复杂性能优势越明显。
 
@@ -120,118 +225,15 @@ it('basic render', () => {
 }
 ```
 
-## 引擎
-
-### 支持 queueMicrotask
-
-受限于 iOS JSC 版本兼容性问题，Lynx 3.1及之前版本无法直接调用 JSC 原生 `Promise`，Lynx `Promise` 实现采用`setTimeout`实现异步逻辑的 polyfill 方案。这一机制导致 `Promise.then()` 回调以宏任务形式执行，与标准 JS 中微任务的高优先级机制不兼容，可能出现异步回调执行顺序与浏览器不一致的问题。在 Lynx 3.2 中基于实现 queueMicrotask 实现了微任务调用，从而实现任务插队需求，支持更为标准的 Promise。相应的 Promise 的实现差异，可以通过以下代码来验证，其行为与主流浏览器不一致。
-
-```js
-setTimeout(() => {
-  console.log('this is a timeout, will exec after');
-}, 0);
-
-Promise.resolve().then((value) => {
-  console.log('this is a Promise, will exec before');
-});
-```
-
-| 优化前 Lynx 运行结果                                                                                                     | Chrome 运行结果                                                                                                            |
-| ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-test-result.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/chrome-test-result.png) |
-
-### console 系列 API 完善
-
-新增 console.[count、countReset、group、groupCollapsed、groupEnd、time、timeLog、timeEnd] API ，对齐 [W3C 标准](https://developer.mozilla.org/en-US/docs/Web/API/console)的实现，可在 Lynx DevTool 控制台查看相关内容。
-
-<center>
-  <img
-    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-console.gif"
-    width="400"
-    height="400"
-    align="center"
-  />
-</center>
-
-### Grid 布局能力增强
-
-为解决在使用 [Grid ](https://lynxjs.org/guide/ui/layout/grid-layout.html)布局遇到难以确定轨道尺寸的问题，Lynx 3.2 中在 Grid 轨道样式中引入 W3C 标准的布局关键字 `minmax()`、`max-content`、`fit-content`，配和在 `grid-template-columns`、`grid-template-rows`、`grid-auto-columns`、`grid-auto-rows` 中使用，帮助更精确确定 Grid 容器的尺寸。
-
-以下示例中，有一个三列的网格，第一列展示固定大小为容器宽度的 20%、第二列第二列根据最大内容来展示、第三列最小需要 50px 宽度展示，最大是可以填充到最大的内容展示，最终受容器限制。我们可以使用 `grid-template-columns: 20% max-content minmax(50px, max-content)` 来实现这一布局。
-
-<Go
-  example="css"
-  defaultFile="src/grid_layout/index.tsx"
-  defaultEntryFile="dist/grid_layout.lynx.bundle"
-  highlight="{24}"
-  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/grid-minmax.png"
-  entry="src/grid_layout"
-/>
-
-### 跨文本选择
-
-在 Lynx 3.1 及以前的版本中，仅支持在文本元素内复制文本。在长文章页面等更复杂的场景中，每个文本元素为一个段落，此时需要跨文本元素的文本复制能力，Lynx 3.2 版本完成支持了该能力，使文本复制体验接近 Web。
-
-<Go
-  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/cross-text-select.gif"
-  example="text"
-  defaultFile="src/cross_text_selection/index.tsx"
-  defaultEntryFile="dist/cross_text_selection.lynx.bundle"
-  entry="src/cross_text_selection"
-/>
-
-### `<list>` 元件
-
-我们在 Lynx 3.2 中对 `<list>`元件的功能做了完善以提供更好的开发体验，同时还对其首屏、滚动做了深度的优化，使得 `<list>` 具备更加优秀的性能表现。
-
-#### 功能更新
-
-- 完善[磁吸定位能力](https://lynx.bytedance.net/api/components/built-in/list.html#item-snap)，使分页滚动体验更加顺畅。基于这一改进，开发者可以用不足 10 行代码构建沉浸式的信息流体验，跑马灯这类需要精确控制位移的复杂交互也能轻松实现
-
-<Go
-  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-snap.gif"
-  example="list"
-  defaultFile="src/horizontal-snap/index.tsx"
-  defaultEntryFile="dist/horizontal-snap.lynx.bundle"
-  highlight="{26}"
-  entry="src/horizontal-snap"
-/>
-
-- 增加对`<list-item>`上 [z-index](https://lynxjs.org/zh/api/css/properties/z-index.html) 的支持，能够更加灵活的调整列表项的视图层级
-
-<Go
-  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-z-index.gif"
-  example="list"
-  defaultFile="src/zIndex/index.tsx"
-  defaultEntryFile="dist/zIndex.lynx.bundle"
-  highlight="{22}"
-  entry="src/zIndex"
-/>
-
-#### 性能优化
-
-- 多线程配合子节点的批量渲染，通过对子树进行异步解析属性与树结构调整，优化批量渲染节点的整体耗时，从而提升`<list>`首屏或者数据更新时的渲染性能。经验证，测试环境中复杂页面的首屏性能提升 20%+。
-
-- `<list>`异步渲染模式的优化，增加多种策略来解决异步调度产生渲染完整性问题，带来更极致的滚动体验。
-
-<Go
-  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.gif"
-  example="list"
-  defaultFile="src/async-rendering/index.tsx"
-  defaultEntryFile="dist/async-rendering.lynx.bundle"
-  highlight="{16}"
-  entry="src/async-rendering"
-/>
-
 ## DevTool
 
-相信大部分 Lynx 开发者体验过 Lynx DevTool，会发现 DevTool 的左侧有一个截屏放映区域，用于镜像显示调试设备上的 Lynx 页面。在新的版本中新增了一个分辨率切换开关，可切换至高清 (HD) 或标清 (SD) 模式。当设备连接不稳定时，可使用标清模式减少数据传输带宽，使画面更流畅。
+使用过 DevTool 的 Lynx 开发者会发现 DevTool 的左侧有一个投屏区域，用于镜像显示调试设备上的 Lynx 页面。在新的版本中新增了一个分辨率切换开关，可切换至高清 (HD) 或标清 (SD) 模式。当设备连接不稳定时，可使用标清模式减少数据传输带宽，使画面更流畅。
 
-如要体验该功能，访问 [DevTool Release 记录](https://github.com/lynx-family/lynx-devtool/releases) 下载最新 Lynx DevTool 桌面应用程序。
+如要体验该功能，访问 [DevTool Release 记录](https://github.com/lynx-family/lynx-devtool/releases/tag/v0.0.2) 下载最新 Lynx DevTool 桌面应用程序。
 
 <center>
   <img
-    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/devtools-opt.gif"
+    src="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/devtoolsopt.gif"
     width="800"
     height="800"
   />
@@ -243,7 +245,7 @@ Promise.resolve().then((value) => {
 
 参照官网[接入 Lynx 到现有应用](https://lynxjs.org/zh/guide/start/integrate-with-existing-apps.html#platform=ios)，更新 Lynx 以及 LynxService 依赖版本，完成 Lynx 3.2 版本升级。
 
-#### Lynx 依赖版本更新
+- **Lynx 依赖版本更新**
 
 在工程的 `build.gradle` 或 `build.gradle.kts` 中，升级依赖至如下版本：
 
@@ -266,7 +268,7 @@ dependencies {
 ```groovy title=build.gradle.kts {3-6}
 dependencies {
     // lynx dependencies
-    implementation("org.lynxsdk.lynx:lynx:3.2.00")
+    implementation("org.lynxsdk.lynx:lynx:3.2.0")
     implementation("org.lynxsdk.lynx:lynx-jssdk:3.2.0")
     implementation("org.lynxsdk.lynx:lynx-trace:3.2.0")
     implementation("org.lynxsdk.lynx:primjs:2.12.0")
@@ -276,7 +278,7 @@ dependencies {
 </Tab>
 </Tabs>
 
-#### LynxService 依赖版本更新
+- **LynxService 依赖版本更新**
 
 在工程的 `build.gradle` 或 `build.gradle.kts` 中，升级依赖至如下版本：
 
@@ -351,7 +353,7 @@ dependencies {
 
 ### iOS
 
-#### Lynx 依赖版本更新
+- **Lynx 依赖版本更新**
 
 在项目的 `Podfile` 中，更新依赖至如下版本：
 
@@ -372,7 +374,7 @@ end
 ````
 </CodeFold>
 
-#### LynxService 依赖版本更新
+-  **LynxService 依赖版本更新**
 
 在项目的 `Podfile` 中，更新依赖至如下版本：
 
@@ -403,7 +405,7 @@ end
 
 ## 写在最后
 
-感谢 Lynx 社区全体成员对 Lynx 3.2 版本发布的支持！Lynx 作为一个新开源项目，我们对其未来满怀憧憬，也迫切地期待社区成员基于 Lynx 开发的应用程序早日亮相。
+感谢 Lynx 社区全体成员对 Lynx 3.2 版本发布的支持！Lynx 作为一个开源项目的新成员，我们对其未来满怀憧憬，也迫切地期待社区成员基于 Lynx 开发的应用程序早日亮相。
 
 未来，我们将与社区携手共进，按[规划](https://lynxjs.org/blog/lynx-open-source-roadmap-2025.html)陆续推出更多功能支持，例如新增 Input 等组件、适配鸿蒙与 PC 等更多平台。在此过程中，恳请大家保持耐心并给予理解。
 
