@@ -18,7 +18,7 @@ In [March 2025](blog/lynx-unlock-native-for-more) we launched [Lynx](https://git
 
 ![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
 
-Lynx 3.2 has updated the engine, framework, and tools. Specifically, the `list` Element, Grid Layout, Text Select, Rspeedy tools, ReactLynx testing tools, Lynx for Web and DevTool have all been improved, making the development process more efficient and leads to a significant improvement in performance. With over [296 commits](https://github.com/lynx-family/lynx/releases/) from 61 contributors (including some first-time contributors) who helped enhance the open-source project through documentation and feature contributions. Let’s explore what’s new!
+Lynx 3.2 has updated the engine, framework, and tools. Specifically, the `list` Element, Grid Layout, Text Select, Rspeedy tools, ReactLynx testing tools and DevTool have all been improved, making the development process more efficient and leads to a significant improvement in performance. With over [296 commits](https://github.com/lynx-family/lynx/releases/) from 61 contributors (including some first-time contributors) who helped enhance the open-source project through documentation and feature contributions. Let’s explore what’s new!
 
 ## Engine
 
@@ -201,29 +201,6 @@ it('basic render', () => {
     </view>
   `);
 });
-```
-
-## Lynx for Web
-
-[Lynx for Web](https://github.com/lynx-family/lynx-stack/tree/main/packages/web-platform) is an implementation of Lynx's native binding APIs based on Browser APIs. In this way, Lynx for Web can help Lynx adapt to more platforms, such as desktops, TVs, or Internet of Things (IoT) devices.
-
-In previous versions, the implementation used in Lynx for Web was a single-threaded version. In the [0.12.0](https://www.npmjs.com/package/@lynx-js/web-core/v/0.12.0) version, Rspack Worker capabilities will be used to create Workers, thereby achieving multi-threaded rendering and truly delivering high performance similar to Lynx Android and iOS.
-
-- **Multi-Thread Render**
-
-In the multi-thread rendering design of Lynx for Web, the main thread is only responsible for rendering and the logic related to the Document Object Model (DOM). The JavaScript logic of the pages, such as data processing and the difference calculation of the Virtual Document Object Model (VDOM), will be executed concurrently in worker threads. The more complex the JavaScript logic is, the more obvious the performance advantages of the multi-thread architecture will be.
-
-![lynx-for-web-multithread](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-for-web-multithread-opt.png)
-
-Actual data shows that in some business scenarios, the multi-threaded rendering of Lynx for Web achieves approximately a 30% performance improvement compared to the main thread version. Meanwhile, a [test case](https://github.com/PupilTong/performance-explanation-react-vs-reactlynx) is also provided. If you are interested, you can explore based on that.
-
-If you want to experience the latest Lynx for Web, you can quickly configure it in your existing project dependencies:
-
-```js
-"dependencies": {
-    "@lynx-js/web-core": "^0.12.0",
-    "@lynx-js/web-elements": "^0.12.0",
-}
 ```
 
 ## DevTool

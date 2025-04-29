@@ -18,7 +18,7 @@ _2025 年 4 月 30 日_
 
 ![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
 
-Lynx 3.2 对引擎、框架和工具进行了全面更新。其中，`List` 元件、Grid 布局、跨文本选择、Rspeedy 工具、ReactLynx 测试工具、Lynx for Web 以及 DevTool 均得到了改进，使得开发过程更加高效，性能也有了显著提升。值得一提的是，Lynx 3.2 拥有来自 61 位贡献者的超过 [296 次提交](https://github.com/lynx-family/lynx/releases/)；其中包含许多外部开发者，在文档、工具、功能上对 Lynx 开源给予很大的帮助。让我们一起开始探索吧！
+Lynx 3.2 对引擎、框架和工具进行了全面更新。其中，`List` 元件、Grid 布局、跨文本选择、Rspeedy 工具、ReactLynx 测试工具以及 DevTool 均得到了改进，使得开发过程更加高效，性能也有了显著提升。值得一提的是，Lynx 3.2 拥有来自 61 位贡献者的超过 [296 次提交](https://github.com/lynx-family/lynx/releases/)；其中包含许多外部开发者，在文档、工具、功能上对 Lynx 开源给予很大的帮助。让我们一起开始探索吧！
 
 ## 引擎
 
@@ -202,27 +202,6 @@ it('basic render', () => {
     </view>
   `);
 });
-```
-
-## Lynx for Web
-
-[Lynx for Web](https://github.com/lynx-family/lynx-stack/tree/main/packages/web-platform) 是基于浏览器 API 来模拟实现 Lynx，最终将 Lynx 代码运行到浏览器一种方式。通过这种方式，Lynx for Web 能够帮助 Lynx 扩展到更多平台，如桌面设备、电视或物联网（IoT）设备。在 Lynx for Web [0.12.0](https://www.npmjs.com/package/@lynx-js/web-core/v/0.12.0) 版本中，借助 Rspack Worker 能力创建 Worker，完整实现了 Lynx for Web 多线程渲染，达到与 Lynx Android 和 iOS 相近的高性能表现。
-
-- **Multi-Thread Render**
-
-在 Lynx for Web 多线程渲染设计中，Main Thread 只执行渲染、DOM相关逻辑。卡片的 JS 逻辑，如数据处理、VDOM Diff 在 Worker 中并发执行，这样 JS 逻辑越复杂性能优势越明显。
-
-![lynx-for-web-multithread](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-for-web-multithread-opt.png)
-
-在真实业务场景中性能对比，Lynx for Web 多线程渲染相对于 Main Thread 无优化版本有 30% 左右的优化；同时也提供了一个[测试 Case](https://github.com/PupilTong/performance-explanation-react-vs-reactlynx)，若您对此感兴趣可以基于此探索。
-
-如果您想立即体验 Lynx for Web 最新高性能的实现，可以在现有的项目依赖中快速配置：
-
-```js
-"dependencies": {
-    "@lynx-js/web-core": "^0.12.0",
-    "@lynx-js/web-elements": "^0.12.0",
-}
 ```
 
 ## DevTool
