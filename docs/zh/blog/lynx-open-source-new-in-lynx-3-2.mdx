@@ -18,7 +18,7 @@ _2025 年 4 月 29 日_
 
 ![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
 
-Lynx 3.2 对框架、引擎和工具进行了全面更新。其中，List 元件、ReactLynx 测试工具、Lynx for Web 以及 Rspeedy 工具均得到了改进，使得开发过程更加高效，性能也有了显著提升。此外，DevTools 中新增的一些特性令人惊喜，能够让开发者在调试 Lynx 项目时更加流畅，有效提高开发效率。值得一提的是，Lynx 3.2 拥有来自 61 位贡献者的超过 [296 次提交](https://github.com/lynx-family/lynx/releases/)；其中包含许多外部开发者，在文档、工具、功能上对 Lynx 开源给予很大的帮助；Lynx 作为开源领域的新成员，具备不错的社区活力和协作精神，同时未来还有很大的进步空间。让我们一起开始探索吧！
+Lynx 3.2 对框架、引擎和工具进行了全面更新。其中，List 元件、ReactLynx 测试工具、Lynx for Web 以及 Rspeedy 工具均得到了改进，使得开发过程更加高效，性能也有了显著提升。值得一提的是，Lynx 3.2 拥有来自 61 位贡献者的超过 [296 次提交](https://github.com/lynx-family/lynx/releases/)；其中包含许多外部开发者，在文档、工具、功能上对 Lynx 开源给予很大的帮助；Lynx 作为开源领域的新成员，具备不错的社区活力和协作精神，同时未来还有很大的进步空间。让我们一起开始探索吧！
 
 ## Rspeedy: Rslib and Rspack 1.3
 
@@ -170,7 +170,7 @@ Promise.resolve().then((value) => {
 
 ### 跨文本选择
 
-在之前的发布的 Lynx 版本中，仅支持在文本元素内复制文本。在长文章页面等更复杂的场景中，每个文本元素为一个段落，此时需要跨文本元素的文本复制能力，Lynx 3.2 版本完成支持了该能力，使文本复制体验接近 Web。
+在 Lynx 3.1 及以前的版本中，仅支持在文本元素内复制文本。在长文章页面等更复杂的场景中，每个文本元素为一个段落，此时需要跨文本元素的文本复制能力，Lynx 3.2 版本完成支持了该能力，使文本复制体验接近 Web。
 
 <Go
   img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/cross-text-select.gif"
@@ -183,21 +183,6 @@ Promise.resolve().then((value) => {
 ### `<list>` 元件
 
 我们在 Lynx 3.2 中对 `<list>`元件的功能做了完善以提供更好的开发体验，同时还对其首屏、滚动做了深度的优化，使得 `<list>` 具备更加优秀的性能表现。
-
-#### 性能优化
-
-- 多线程配合子节点的批量渲染，通过对子树进行异步解析属性与树结构调整，优化批量渲染节点的整体耗时，从而提升`<list>`首屏或者数据更新时的渲染性能。经验证，测试环境中复杂页面的首屏性能提升 20%+。
-
-- `<list>`异步渲染模式的优化，增加多种策略来解决异步调度产生渲染完整性问题，带来更极致的滚动体验。
-
-<Go
-  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.gif"
-  example="list"
-  defaultFile="src/async-rendering/index.tsx"
-  defaultEntryFile="dist/async-rendering.lynx.bundle"
-  highlight="{16}"
-  entry="src/async-rendering"
-/>
 
 #### 功能更新
 
@@ -221,6 +206,21 @@ Promise.resolve().then((value) => {
   defaultEntryFile="dist/zIndex.lynx.bundle"
   highlight="{22}"
   entry="src/zIndex"
+/>
+
+#### 性能优化
+
+- 多线程配合子节点的批量渲染，通过对子树进行异步解析属性与树结构调整，优化批量渲染节点的整体耗时，从而提升`<list>`首屏或者数据更新时的渲染性能。经验证，测试环境中复杂页面的首屏性能提升 20%+。
+
+- `<list>`异步渲染模式的优化，增加多种策略来解决异步调度产生渲染完整性问题，带来更极致的滚动体验。
+
+<Go
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.gif"
+  example="list"
+  defaultFile="src/async-rendering/index.tsx"
+  defaultEntryFile="dist/async-rendering.lynx.bundle"
+  highlight="{16}"
+  entry="src/async-rendering"
 />
 
 ## DevTool

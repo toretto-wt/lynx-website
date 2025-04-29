@@ -18,7 +18,7 @@ In [March 2025](blog/lynx-unlock-native-for-more) we launched [Lynx](https://git
 
 ![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
 
-Lynx 3.2 has updated the framework, engine, and tools. Specifically, the List component, ReactLynx testing tools, Lynx for Web, and Rspeedy tools have all been improved, making the development process more efficient and leads to a significant improvement in performance. With over [296 commits](https://github.com/lynx-family/lynx/releases/) from 61 contributors (including some first-time contributors) who helped enhance the open-source project through documentation and feature contributions. Let’s explore what’s new!
+Lynx 3.2 has updated the framework, engine, and tools. Specifically, the Rspeedy tools, ReactLynx testing tools, Lynx for Web and `list` Element have all been improved, making the development process more efficient and leads to a significant improvement in performance. With over [296 commits](https://github.com/lynx-family/lynx/releases/) from 61 contributors (including some first-time contributors) who helped enhance the open-source project through documentation and feature contributions. Let’s explore what’s new!
 
 ## Rspeedy: Rslib and Rspack 1.3
 
@@ -176,7 +176,7 @@ In the following example, there is a three-column grid. The first column has a f
 
 ### Text Select
 
-In the previous versions of Lynx, only text copying within text elements was supported. In more complex cases, such as long article pages, each text element represents a paragraph. In such cases, the ability to copy text across text elements is required. The Lynx 3.2 version now fully supports this ability, making the text-copying experience similar to that on the Web.
+In 3.1 and earlier of Lynx, only text copying within text elements was supported. In more complex cases, such as long article pages, each text element represents a paragraph. In such cases, the ability to copy text across text elements is required. The Lynx 3.2 version now fully supports this ability, making the text-copying experience similar to that on the Web.
 
 <Go
   img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/cross-text-select.gif"
@@ -189,21 +189,6 @@ In the previous versions of Lynx, only text copying within text elements was sup
 ### `<list>` Element
 
 In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer a better development experience. Additionally, we've conducted in-depth optimizations on its first-screen rendering and scrolling performance, enabling the `<list>` to deliver even better performance.
-
-#### Performance Optimization
-
-- Optimization of multi-threaded batch rendering for child nodes: By asynchronously parsing attributes and adjusting the tree structure of subtrees, the overall time consumption for batch rendering nodes is optimized, improving the rendering performance of the `<list>` during first-screen loading or data updates. Some complex pages show that the first-screen performance has been improved by over 20%.
-
-- Optimization of the asynchronous rendering mode for `<list>`: Multiple strategies are added to address rendering integrity issues caused by asynchronous scheduling, bringing a more extreme scrolling experience.
-
-<Go
-  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.gif"
-  example="list"
-  defaultFile="src/async-rendering/index.tsx"
-  defaultEntryFile="dist/async-rendering.lynx.bundle"
-  highlight="{16}"
-  entry="src/async-rendering"
-/>
 
 #### Feature Update
 
@@ -227,6 +212,21 @@ In Lynx 3.2, we've enhanced the functionality of the `<list>` component to offer
     highlight="{22}"
     entry="src/zIndex"
   />
+
+#### Performance Optimization
+
+- Optimization of multi-threaded batch rendering for child nodes: By asynchronously parsing attributes and adjusting the tree structure of subtrees, the overall time consumption for batch rendering nodes is optimized, improving the rendering performance of the `<list>` during first-screen loading or data updates. Some complex pages show that the first-screen performance has been improved by over 20%.
+
+- Optimization of the asynchronous rendering mode for `<list>`: Multiple strategies are added to address rendering integrity issues caused by asynchronous scheduling, bringing a more extreme scrolling experience.
+
+<Go
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-async-render.gif"
+  example="list"
+  defaultFile="src/async-rendering/index.tsx"
+  defaultEntryFile="dist/async-rendering.lynx.bundle"
+  highlight="{16}"
+  entry="src/async-rendering"
+/>
 
 ## DevTool
 
