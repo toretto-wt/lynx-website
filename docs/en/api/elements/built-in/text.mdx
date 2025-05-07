@@ -166,6 +166,28 @@ text-selection?: boolean;
 
 Sets whether to enable text selection. When enabled, `flatten={false}` should be set simultaneously.
 
+### `custom-context-menu`
+
+```tsx
+
+// DefaultValue: false
+custom-context-menu?: boolean;
+
+```
+
+Used to set whether to turn on the custom pop-up context menu after selection and copying. It takes effect after enabling `text-selection`.
+
+### `custom-text-selection`
+
+```tsx
+
+// DefaultValue: false
+custom-text-selection?: boolean;
+
+```
+
+Used to set whether to enable the custom text selection function. When it is enabled, the component will no longer handle the gesture logic related to selection and copying. Developers need to control it through APIs such as `setTextSelection`. It takes effect after enabling `text-selection`.
+
 ## Events
 
 Frontend can bind corresponding event callbacks to components to listen to runtime behaviors. All [basic events](/api/elements/built-in/view.mdx#events) are supported.
