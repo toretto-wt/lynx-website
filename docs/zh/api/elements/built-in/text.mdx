@@ -7,11 +7,11 @@ import { AndroidOnly, Deprecated, Go } from '@lynx';
 
 ## 使用指南
 
-`<text>` 元件在布局上和 `<view>` 不同，不支持设置 `display` 等排版及相关属性，`<text>` 内部有自身的布局方式。`<text>` 元件提供行内格式化上下文。在 Lynx 里，除了在 `<text>` 元件内的元件，其他元件都是块级元件。当元件处于 `<text>` 元件内部时，`<text>` 元件如同提供了一个行内格式化上下文（Inline formatting context），使得其中的元件具有类似行内元件的布局特性，元件不会独占一行，而是与周围文本内容在同一行内排列。
+`<text>` 元件在布局上和 `<view>` 不同，不支持设置 `display` 等排版及相关属性，`<text>` 内部有自身的布局方式。在 Lynx 里，除了在 `<text>` 元件内的元件，其他元件都是块级元件。当元件处于 `<text>` 元件内部时，`<text>` 元件如同提供了一个行内格式化上下文（[Inline formatting context](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_inline_layout/Inline_formatting_context)），使得其中的元件具有类似行内元件的布局特性，元件不会独占一行，而是与周围文本内容在同一行内排列。
 
 ### 嵌套 text
 
-嵌套 text 是 `<text>` 的子元件，可以写成 `<text>`，一般用于设置额外的文字样式或者增加点击事件。
+嵌套 text 是 `<text>` 内的子元件，类似 Web 中 `Inline Elements`， 可以写成 `<text>`，一般用于设置额外的文字样式或者增加点击事件。
 
 与 text 不同的是，嵌套 text 只支持一些 `color/font/background` 相关的属性，不支持 `opacity/margin/padding` 等这些 `<view>` 的属性和 `line-height/text-align` 这些段落属性。
 
@@ -47,7 +47,7 @@ import { AndroidOnly, Deprecated, Go } from '@lynx';
 
 ### 嵌套 image
 
-嵌套 image 是 text 的子元件，可以写成 `<image>`，一般用于图文混排。
+嵌套 image 是 `<text>` 内的子元件，类似 Web 中 `Inline Elements`，可以写成 `<image>`，一般用于图文混排。
 
 :::note
 
@@ -531,7 +531,7 @@ const YourComponent = () => {
 
 如果需求是支持跨多个 `<text>` 元件进行选中并复制内容，需开发者自定义文本选择逻辑：
 
-1. 步骤一：开启自定义文本选择模式
+1. 开启自定义文本选择模式
 
 需要在 `<text>` 元件上设置 `custom-text-selection` 属性，开启之后元件不再处理选择复制相关手势逻辑。
 
@@ -543,7 +543,7 @@ const YourComponent = () => {
   highlight="{270}"
 />
 
-2. 步骤二：在外层 `<view>` 上绑定手势事件
+2. 在外层 `<view>` 上绑定手势事件
 
 在外层 `<view>` 上绑定长按、点击和触摸事件，用于控制选择复制相关手势逻辑。
 
@@ -571,7 +571,7 @@ const YourComponent = () => {
 </view>
 ```
 
-3. 步骤三：处理选择复制交互逻辑
+3. 处理选择复制交互逻辑
 
 - 获取所有文本节点信息：组件挂载时获取所有可选中的文本节点信息，包含节点的 id 和宽高位置等信息
 
@@ -716,8 +716,20 @@ const handleTouchStart = (e) => {
 
 import { LegacyCompatTable } from '@lynx';
 
+### text
+
+[text](/api/elements/built-in/text.html#text)：Lynx 内置元件，用来显示文本内容。
+
 <LegacyCompatTable metadata="elements/text" />
 
+### 嵌套 text
+
+[嵌套 text](/api/elements/built-in/text.html#嵌套-text)： `<text>` 内的子元件， 用于设置额外的文字样式或者增加点击事件。
+
 <LegacyCompatTable metadata="elements/nested-text" />
+
+### 嵌套 image
+
+[嵌套 image](/api/elements/built-in/text.html#嵌套-image)：`<text>` 内的子元件，用于图文混排。
 
 <LegacyCompatTable metadata="elements/nested-image" />
