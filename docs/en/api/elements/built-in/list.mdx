@@ -4,13 +4,13 @@ import { Tab, Tabs } from 'rspress/theme';
 
 # `<list>`
 
-`<list>` is a high-performance scrollable container that enhances rendering performance through lazy loading and reduces memory pressure by implementing recycling and reuse. It supports both horizontal and vertical scrolling, as well as multi-column, grid, and waterfall layouts. `<list>` is commonly used for implementing infinite scrolling in feed streams and similar scenarios.
+The `<list>` component is a high-performance scrollable container that optimizes performance and memory usage through element recycling and lazy loading. It supports horizontal and vertical scrolling with single-column, grid, and waterfall layouts, making it ideal for infinite-scroll feeds and similar use cases.
 
-## Usage Guide
+## Usage
 
-### Implementing Single-Column Layout
+### Single-Column Layout
 
-**1. Set `<list>` width and height**: The width and height of `<list>` represent the size of its visible area, so they need to be fixed values and cannot be expanded by internal content. Only child nodes visible in the visible area will be rendered.
+**1. Set width and height**: The width and height of `<list>` represent the size of its viewport, so they need to be fixed values and cannot be expanded by internal content. Only child nodes visible in the visible area will be rendered.
 
 **2. Set scroll direction and layout form**: Set the attribute [`scroll-orientation`](#scroll-orientation) to specify the layout and scroll direction, and set [`list-type`](#list-type) and [`span-count`](#span-count) to specify the layout form.
 
@@ -24,13 +24,13 @@ import { Tab, Tabs } from 'rspress/theme';
   highlight="{11-13,23-26}"
 />
 
-### Implementing Multi-Column Layout
+### Multi-Column Layout
 
-**1. Set layout type and column count**: Set the layout type [`list-type`](#list-type) to `"flow" (grid layout)` or `"waterfall" (waterfall layout)`, and set [`span-count`](#span-count) >= 2.
+**1. Set layout type and column count**: Set the layout type [`list-type`](#list-type) to `flow` (grid layout) or `waterfall` (waterfall layout), and set [`span-count`](#span-count) >= 2.
 
-**2. Implement full-span child nodes in multi-column layout**: Set the [`full-span`](#full-span) attribute for `<list-item/>` to make it occupy a full row or column in the layout.
+**2. Full-span child nodes in multi-column layout**: Set the [`full-span`](#full-span) attribute for `<list-item/>` to make it occupy a full row or column in the layout.
 
-Grid Layout Example
+Grid Layout Example:
 
 <Go
   img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/doc/list-oss-flow.gif"
@@ -41,7 +41,7 @@ Grid Layout Example
   highlight="{14-15,24}"
 />
 
-Waterfall Layout Example
+Waterfall Layout Example:
 
 <Go
   img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/doc/list-oss-waterfall.gif"
@@ -62,23 +62,13 @@ list-type: 'single' | 'flow' | 'waterfall'
 
 Controls the layout type of the `<list>` component, which needs to be used in conjunction with [`span-count`](#span-count).
 
-| Value       | Description                       |
-| ----------- | --------------------------------- |
-| `single`    | Single-column/row layout          |
-| `flow`      | Multi-column/row grid layout      |
-| `waterfall` | Multi-column/row waterfall layout |
+| Value       | Description                                                                                                                                                                                                                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `single`    | Single-column/row layout                                                                                                                                                                                                                                                                    |
+| `flow`      | Multi-column/row grid layout. The grid layout fully reflects regularity, with the `top` of adjacent child nodes in columns being consistent. Typically used for child nodes of uniform size. The width of child nodes is determined by the width of `<list>` and `span-count`.              |
+| `waterfall` | Multi-column/row waterfall layout. Content is continuously filled from top to bottom into the shortest column, achieving visual continuity and dynamism. Typically used for child nodes of varying sizes. The width of child nodes is determined by the width of `<list>` and `span-count`. |
 
-:::note
-
-Since `<list>` supports both horizontal and vertical orientations, if it is vertically oriented, the main axis is vertical and the cross axis is horizontal. Taking `scroll-orientation` as `vertical` as an example, the `single` method is relatively easy to understand as it occupies a single row. Therefore, the focus is on explaining the `waterfall` and `flow` layouts:
-
-- Similarities
-  - Both `waterfall` and `flow` determine the width of child nodes based on the width of `<list>` and `span-count`.
-- Differences
-  - `waterfall`: Content is continuously filled, with child node elements filling from top to bottom into the shortest column, achieving visual continuity and dynamism. It is typically used for child nodes of varying sizes.
-  - `flow`: The grid layout fully reflects its regularity, with the `top` of adjacent child nodes in the left and right columns being consistent. It is typically used for child nodes of uniform size.
-
-:::
+You can find real world examples in the [Multi-Column Layout](#multi-column-layout) section to see the difference between `flow` and `waterfall` more clearly.
 
 ### `span-count` <Required/> \{#required-span-count}
 
@@ -739,7 +729,7 @@ Continue scrolling the distance specified by `offset` based on the existing offs
 
 ## More Features
 
-### Creating Sticky Elements
+### Sticky Elements
 
 In the `<list>` component, you can achieve sticky top or sticky bottom node effects by setting the [`sticky-top`](#sticky-top) or [`sticky-bottom`](#sticky-bottom) attributes on `<list-item>`.
 
@@ -777,7 +767,7 @@ Set the [`sticky-top`](#sticky-top) or [`sticky-bottom`](#sticky-bottom) attribu
   highlight="{16,25-26}"
 />
 
-### Loading Additional Content When Scrolling to Bottom
+### Loading Content When Scrolling to Edge
 
 The `<list>` component supports infinite scroll loading functionality through two key steps:
 
@@ -792,13 +782,14 @@ First, set an appropriate value for the [`lower-threshold-item-count`](#lower-th
   highlight="{44-47}"
 />
 
-### Implementing Pagination with `item-snap`
+### Pagination with `item-snap`
 
 Set the `factor` to determine the parameter for paginated scrolling positioning, with a range of `[0, 1]`. `0` means `<list-item>` aligns with the top of `<list>`, and `1` means `<list-item>` aligns with the bottom of `<list>`. You can also set `offset` to add a scrolling offset on top of factor.
 
 Example of vertical orientation:
 
 {' '}
+
 <Go
   img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/doc/list-oss-item-snap.gif"
   example="list"
@@ -819,7 +810,7 @@ Example of horizontal orientation:
   highlight="{19,26}"
 />
 
-### Use `z-index` <VersionBadge v="3.2.0" />
+### Use `z-index`
 
 <Go
   img="/assets/list-oss-zIndex.gif"
