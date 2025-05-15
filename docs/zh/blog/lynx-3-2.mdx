@@ -1,5 +1,5 @@
 ---
-date: 2025-04-30
+date: 2025-5-14
 sidebar: false
 ---
 
@@ -8,90 +8,62 @@ import { PackageManagerTabs } from '@theme';
 import { Go, Badge } from '@lynx';
 import { Tab, Tabs } from 'rspress/theme';
 
-_2025 年 4 月 30 日_
+_2025 年 5 月 14 日_
 
 # Lynx 3.2 发布公告
 
 <BlogAvatar list={['shiwentao', 'lynx']} />
 
-[2025 年 3 月](blog/lynx-unlock-native-for-more)，我们将 [Lynx](https://github.com/lynx-family/lynx) 正式开源，并收集到了许多宝贵的反馈和建议，感谢大家对 Lynx 的关注与支持。今天，很高兴与大家分享 Lynx 最新的情况：Lynx 3.2 正式发布了！该版本包含许多功能增强和优化，旨在提升 Lynx 的开发体验并优化 Lynx 性能。
-
 ![lynx-in-3-2](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-3-2.png)
 
-Lynx 3.2 对引擎、框架和工具进行了全面更新。其中，[ReactLynx 测试工具](/blog/lynx-open-source-new-in-lynx-3-2.html#reactlynx-testing-library)、[跨文本选择](/blog/lynx-open-source-new-in-lynx-3-2.html#跨文本选择)、[Grid 布局](/blog/lynx-open-source-new-in-lynx-3-2.html#css-网格布局-minmax-max-content-fit-content)、[`List` 元件](/blog/lynx-open-source-new-in-lynx-3-2.html#list-元件优化)、[Rspeedy 工具](/blog/lynx-open-source-new-in-lynx-3-2.html#rspeedy-rslib-与-rspack-13)、以及 [DevTool](/blog/lynx-open-source-new-in-lynx-3-2.html#devtool-支持清晰度切换) 均得到了改进，使得开发过程更加高效。值得一提的是，Lynx 3.2 拥有来自 61 位贡献者的超过 [296 次提交](https://github.com/lynx-family/lynx/releases/)；其中包含许多社区开发者，在文档、工具、功能上对 Lynx 开源给予很大的帮助。现在，让我们一起开始探索吧！
+今天，我很高兴地与大家分享我们自 2025 年 3 月[开源](blog/lynx-unlock-native-for-more)以来第一个稳定版本 Lynx 3.2，现已正式发布！
+
+Lynx 3.2 对框架、引擎和工具进行了全面更新，包括 [ReactLynx 测试工具](#reactlynx-testing-library)、[`llms.txt` 支持](#网站llmstxt-支持)、[Grid 布局新特性](##css-网格布局minmaxmax-contentfit-content)、[`<list>`](#list-元件优化) 和 [`<text>`](#text-可被定制为跨节点选择) 等等，旨在为开发者带来更熟悉的开发体验和更多的能力。该版本拥有来自 61 位贡献者（包括一些首次贡献者）的超过 [296 次提交](https://github.com/lynx-family/lynx/releases/)。让我们一起来看看有哪些新特性！
 
 ## ReactLynx Testing Library
 
-[ReactLynx Testing Library](/react/react-lynx-testing-library/index) 适用于对 ReactLynx 组件进行单元测试。基于 [`@testing-library/dom`](https://github.com/testing-library/dom-testing-library)（用于页面元素的查询和事件触发），将 ReactLynx 的渲染过程抽象成与标准测试库类似的 API，如 `render`等。用户还可以对页面中的元素进行断言，例如使用 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) 中的 `toBeInTheDocument` 来判断元素是否存在于页面中。
-
-ReactLynx Testing Library 已集成到 [`@lynx-js/react`](https://www.npmjs.com/package/@lynx-js/react) 包的 `testing-library` 子目录中，可直接使用。之后配置 [Vitest](https://vitest.dev/) 测试框架，您就可以开始编写测试并运行它们了。
-
-```js
-// vitest.config.js
-import { defineConfig, mergeConfig } from 'vitest/config';
-import { createVitestConfig } from '@lynx-js/react/testing-library/vitest-config';
-
-const defaultConfig = createVitestConfig();
-const config = defineConfig({
-  test: {
-    // ...
-  },
-});
-
-export default mergeConfig(defaultConfig, config);
-```
-
-以下是一个示例，更多的测试使用方式可参考 [ReactLynx Testing Library](https://github.com/lynx-family/lynx-stack/tree/main/packages/react/testing-library/src/__tests__)。
+我们将 JavaScript 社区广受欢迎的 UI 组件测试工具 [Testing Library](https://testing-library.com/) 引入到了 Lynx 中。新增的 [`@lynx-js/react/testing-library/`](/api/reactlynx-testing-library/index) 包提供了 [`render`](/api/reactlynx-testing-library/Function.render.html) 等测试工具函数。同时，它也可以与官方的 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom) 搭配使用，让你能够使用 `toBeInTheDocument` 等匹配器来验证元素是否存在及其行为表现。
 
 ```js
 import '@testing-library/jest-dom';
 import { expect, it } from 'vitest';
 import { render } from '@lynx-js/react/testing-library';
 
-it('basic render', () => {
-  const WrapperComponent = ({ children }) => (
+it('renders', () => {
+  const Wrapper = ({ children }) => (
     <view data-testid="wrapper">{children}</view>
   );
-  const Comp = () => {
-    return <view data-testid="inner" style="background-color: yellow;" />;
-  };
-  const { container, getByTestId } = render(<Comp />, {
-    wrapper: WrapperComponent,
-  });
-  // Since Lynx Test Environment uses jsdom to implement Element PAPI at the bottom layer
-  // you can use the method in `@testing-library/jest-dom` to assert whether the page element exists
+  const Comp = () => (
+    <view data-testid="inner" style="background-color: yellow;" />
+  );
+  const { container, getByTestId } = render(<Comp />, { wrapper: Wrapper });
+
   expect(getByTestId('wrapper')).toBeInTheDocument();
   expect(container.firstChild).toMatchInlineSnapshot(`
-    <view
-      data-testid="wrapper"
-    >
-      <view
-        data-testid="inner"
-        style="background-color: yellow;"
-      />
+    <view data-testid="wrapper">
+      <view data-testid="inner" style="background-color: yellow;"/>
     </view>
   `);
 });
 ```
 
-## 跨文本选择 <Badge>Web 友好</Badge>
+[了解更多关于 ReactLynx Testing Library 的使用指南](/zh/react/reactlynx-testing-library.mdx)。
 
-在某些复杂情况下，例如较长的文章页面，每个文本元素都代表一个段落，需要跨文本元素复制文本的功能。Lynx 3.2 版本完成支持了跨文本选择能力，使文本复制体验接近 Web。
+## 网站: `llms.txt` 支持
 
-<Go
-  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/cross-text-select.gif"
-  example="text"
-  defaultFile="src/cross_text_selection/index.tsx"
-  defaultEntryFile="dist/cross_text_selection.lynx.bundle"
-  highlight="{30}"
-  entry="src/cross_text_selection"
-/>
+通过升级到 [Rspress v2](https://v2.rspress.dev/) 并利用新的 [LLM 插件](https://x.com/rspack_dev/status/1917844832149725695)，Lynx 网站现已完全支持 [https://lynxjs.org/llms.txt](https://lynxjs.org/llms.txt) 和 [https://lynxjs.org/llm-full.txt](https://lynxjs.org/llm-full.txt)，以帮助 AI 更好地理解 Lynx，提升你使用 AI 辅助编程的体验。对于每个页面，你都可以通过将 `.html` 扩展名替换为 `.md` 来获取原始的 markdown 文件。
+
+[了解更多关于 `llms.txt` 的信息](https://llmstxt.org/)。
 
 ## CSS 网格布局: `minmax()`, `max-content`, `fit-content` <Badge>Web 友好</Badge>
 
-Lynx 3.2 增加了对 W3C [Grid](https://lynxjs.org/guide/ui/layout/grid-layout.html) 布局关键字 `minmax()`、`max-content`、`fit-content` 的支持，可以在 `grid-template-columns`、`grid-template-rows`、`grid-auto-columns`、`grid-auto-rows` 中更精确地确定网格容器的尺寸。
+Lynx 3.2 添加了三个 CSS 函数 `minmax()`、`max-content` 和 `fit-content`，以帮助你在 [CSS 网格布局](https://lynxjs.org/guide/ui/layout/grid-layout.html)中更好地控制网格大小。你可以在 `grid-template-columns`、`grid-template-rows`、`grid-auto-columns` 和 `grid-auto-rows` 中使用它们。
 
-以下示例中，有一个三列的网格，第一列展示固定大小为容器宽度的 20%、第二列第二列根据最大内容来展示、第三列最小需要 50px 宽度展示，最大是可以填充到最大的内容展示，最终受容器限制。我们可以使用 `grid-template-columns: 20% max-content minmax(50px, max-content)` 来实现这一布局。
+让我们来看一个三列布局的例子，使用 `grid-template-columns: 20% max-content minmax(50px, max-content)` 来实现：
+
+- 第一列固定为容器宽度的 20%
+- 第二列宽度自动适应其内容的最大宽度
+- 第三列的宽度在最小 50px 和最大内容宽度之间动态调整，同时受容器宽度约束
 
 <Go
   example="css"
@@ -104,11 +76,9 @@ Lynx 3.2 增加了对 W3C [Grid](https://lynxjs.org/guide/ui/layout/grid-layout.
 
 ## `<list>` 元件优化
 
-Lynx 3.2 中对 `<list>` 元件的功能做了完善以提供更好的开发体验，同时还对其首屏、滚动做了异步的优化，使得 `<list>` 具备更加优秀的性能表现。
+### 使用 `item-snap` 进行滚动吸附
 
-### item-snap
-
-提供多端一致的分页以及吸顶功能，完善了[**磁吸定位能力**](/api/elements/built-in/list.html#item-snap)，使分页滚动体验更加顺畅。开发者可以更便捷的构建沉浸式的信息流体验，类似跑马灯需要精确控制位移的复杂交互也能比较容易实现。
+使用 [`item-snap` 滚动吸附](/api/elements/built-in/list.html#item-snap) 在 Lynx 3.2 中已经成为一个稳定特性。它可以在所有平台上提供了流畅且易用的分页功能，使开发者能够创建具有精确滚动交互的信息流或轮播图。
 
 <Go
   img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/list-snap.gif"
@@ -119,7 +89,9 @@ Lynx 3.2 中对 `<list>` 元件的功能做了完善以提供更好的开发体�
   entry="src/horizontal-snap"
 />
 
-### z-index 支持
+[学习如何使用 `item-snap` 实现分页。](/api/elements/built-in/list.html#pagination-withitem-snap)
+
+### 新增 `<list-item>` 的 `z-index` 支持
 
 增加对 `<list-item>` 上 [**z-index**](https://lynxjs.org/zh/api/css/properties/z-index.html) 的支持，能够更方便的调整列表项的视图层级。
 
@@ -132,17 +104,20 @@ Lynx 3.2 中对 `<list>` 元件的功能做了完善以提供更好的开发体�
   entry="src/zIndex"
 />
 
-### `<list>` 性能优化
+## `<text>` 可被定制为跨节点选择 <Badge>Web 友好</Badge>
 
-Lynx 3.2 支持了细粒度地拆分 `<list>` 的渲染任务，能够让子节点 `<list-item>` 的渲染任务采用异步线程的方式执行，提升了 `<list>` 首屏渲染性能以及快速滚动性能 FPS。
+在长文章场景下，通过新增的 [`custom-text-selection`](/api/elements/built-in/text.html#custom-text-selection) 特性，你可以 [自定义实现跨文本节点的选择和复制功能](/api/elements/built-in/text.html#crosstext-selection-and-copying)，使文本选择体验更接近 Web。
 
-| 优化前快速滚动 FPS                                                                                                | 优化后快速滑动 FPS                                                                                                 |
-| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/sync-list.gif) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/async-list.gif) |
+<Go
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/cross-text-select.gif"
+  example="text"
+  defaultFile="src/cross_text_selection/index.tsx"
+  defaultEntryFile="dist/cross_text_selection.lynx.bundle"
+  highlight="{30}"
+  entry="src/cross_text_selection"
+/>
 
-[list example](https://github.com/lynx-family/lynx-examples/pull/51)中是一个完整示例，可用于体验优化后的 `<list>`。
-
-## 微任务支持 <Badge>Web 友好</Badge>
+## 微任务 <Badge>Web 友好</Badge>
 
 在 Lynx 3.2 之前，Lynx 并不支持微任务，以下代码的行为与Web 浏览器并不一致。Lynx 3.2 中支持了基于微任务的 `Promise`，并新增了 API [`lynx.queueMicrotask`](/api/lynx-api/lynx/lynx-queue-microtask)。
 
@@ -160,9 +135,9 @@ Promise.resolve().then((value) => {
 | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
 | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/lynx-test-result.png) | ![](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/chrome-test-result.png) |
 
-## console 系列 API 完善 <Badge>Web 友好</Badge>
+## `console` API 完善 <Badge>Web 友好</Badge>
 
-Lynx 3.2 新增 console.[count、countReset、group、groupCollapsed、groupEnd、time、timeLog、timeEnd] API ，对齐 [W3C 标准](https://developer.mozilla.org/en-US/docs/Web/API/console)的实现，可在 Lynx DevTool 控制台查看相关内容。
+Lynx 3.2 进一步实现了大部分符合 [W3C 标准](https://developer.mozilla.org/en-US/docs/Web/API/console)的 `console` API，提供了更全面的调试体验。更多详情请参阅 [API 参考](api/lynx-api/global/console/assert.html)。
 
 <center>
   <img
@@ -175,9 +150,7 @@ Lynx 3.2 新增 console.[count、countReset、group、groupCollapsed、groupEnd�
 
 ## Rspeedy: Rslib 与 Rspack 1.3
 
-Rspeedy [v0.9.0](https://github.com/lynx-family/lynx-stack/discussions/482) 已发布，默认打包库使用 [Rslib](https://lib.rsbuild.dev/)，整体安装体积减少了超过 50%。同时该版本将 [Rspack](https://rspack.dev/) 升级至 [1.3](https://rspack.dev/blog/announcing-1-3) 带来了更多增强功能，例如更快的代码拆分、更小的打包体积、更低的内存消耗。此外，该版本还包含一些其他改进，如新增配置项等功能。有关这些更改的完整概述，请查看 [`@lynx-js/rspeedy v0.9.0`](https://github.com/lynx-family/lynx-stack/blob/main/packages/rspeedy/core/CHANGELOG.md#090) 变更日志。
-
-![Rspeedy0-9-0](https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/blog/news-in-3.2/Rspeedy0-9-0.png)
+Rspeedy [v0.9.0](https://github.com/lynx-family/lynx-stack/discussions/482) 已发布，默认打包库使用 [Rslib](https://lib.rsbuild.dev/)，整体安装体积减少了超过 **50%。同时该版本将 **[Rspack](https://rspack.dev/) 升级至 [1.3](https://rspack.dev/blog/announcing-1-3) 带来了更多增强功能，例如更快的代码拆分、更小的打包体积、更低的内存消耗。此外，该版本还包含一些其他改进，如新增配置项等功能。有关这些更改的完整概述，请查看 [`@lynx-js/rspeedy v0.9.0`](https://github.com/lynx-family/lynx-stack/blob/main/packages/rspeedy/core/CHANGELOG.md#090) 变更日志。
 
 若要体验 Rspeedy v0.9.0 版本的新功能，您可以在 Rspeedy 项目中使用以下命令进行升级：
 
@@ -363,3 +336,7 @@ end
 未来，我们将与社区携手共进，按[规划](https://lynxjs.org/blog/lynx-open-source-roadmap-2025.html)陆续推出更多功能支持，例如新增 Input 等组件、适配鸿蒙与 PC 等更多平台。
 
 请查阅[版本说明和更新](https://github.com/lynx-family/lynx/releases/tag/3.2.0)，开启您全新的 Lynx 开发构建之旅！
+
+---
+
+_感谢[黄玄](https://x.com/huxpro)、[张磊](https://x.com/zoolsher)和[刘守群](https://x.com/liushouqun)在撰写此博客时提供的帮助。_

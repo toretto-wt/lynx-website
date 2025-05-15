@@ -4,11 +4,11 @@ import { Badge } from 'rspress/theme';
 
 import { Required, Deprecated, AndroidOnly, IOSOnly, Go } from '@lynx';
 
-基础视图元件，用于承载其他元件。`<view>` 是所有其他元件的基础，它的属性、事件、方法都可以在其他元件中被使用。
+一个类似 HTML `<div>` 的容器元素。与 `<div>` 类似，`<view>` 是一个多功能的容器元素，可以容纳其他元素，并作为构建布局的基础。所有 `<view>` 上可用的属性、事件和方法都可以被其他元素使用。
 
 ## 使用指南
 
-### 承载绘制能力
+### 作为绘制容器
 
 <Go
   example="view"
@@ -17,7 +17,7 @@ import { Required, Deprecated, AndroidOnly, IOSOnly, Go } from '@lynx';
   highlight="{7-22}"
 />
 
-### 用于处理布局
+### 作为布局容器
 
 <Go
   example="view"
