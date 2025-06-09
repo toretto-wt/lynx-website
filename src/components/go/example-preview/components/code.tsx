@@ -1,7 +1,10 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { getCustomMDXComponent } from '@theme';
+import { FC, useEffect, useRef, useState } from 'react';
+import { CodeBlockRuntime } from '@theme';
 
 import { getHighlightLines } from '../utils/example-data';
+import { transformerNotationHighlight } from '@shikijs/transformers';
+import { transformerLineNumber } from '@rspress/plugin-shiki/transformers';
+import { transformerRuntimeMetaHighlight } from './shiki-transformer';
 
 interface CodeProps {
   val: string;
@@ -18,35 +21,40 @@ export const Code: FC<CodeProps> = ({
   isFirstShowCode,
   setIsFirstShowCode,
 }) => {
-  const Comp = getCustomMDXComponent();
   const containerRef = useRef<HTMLDivElement>(null);
   const [highlightVal, setHighlightVal] = useState(highlight);
   const defaultValRef = useRef(val);
-  useEffect(() => {
+
+  function scrollToFirstHighlightLine() {
     if (!val) {
       return;
     }
+
     if (isFirstShowCode) {
       if (containerRef.current && highlight) {
         const highlightLines = getHighlightLines(highlight);
         const firstHighlight = highlightLines[0];
         setIsFirstShowCode(false);
         if (firstHighlight > 3) {
-          if (firstHighlight && containerRef.current) {
-            const firstHighlightElement = containerRef.current.querySelector(
-              `pre.code > code > span:nth-of-type(${firstHighlight - 2})`,
-            );
+          setTimeout(() => {
+            const container = containerRef.current;
+            if (container) {
+              const firstHighlightElement = containerRef.current.querySelector(
+                `pre.shiki code span.highlighted`,
+              );
 
-            if (firstHighlightElement) {
-              const container = containerRef.current.parentElement;
-              if (container) {
-                const offsetTop =
-                  firstHighlightElement.getBoundingClientRect().top -
-                  containerRef.current.getBoundingClientRect().top;
-                container.scrollTo({ top: offsetTop, behavior: 'smooth' });
+              if (firstHighlightElement) {
+                const container = containerRef.current.parentElement;
+                if (container) {
+                  const offsetTop =
+                    firstHighlightElement.getBoundingClientRect().top -
+                    containerRef.current.getBoundingClientRect().top -
+                    50;
+                  container.scrollTo({ top: offsetTop, behavior: 'smooth' });
+                }
               }
             }
-          }
+          });
         }
         defaultValRef.current = val;
       }
@@ -65,7 +73,7 @@ export const Code: FC<CodeProps> = ({
         }, 0);
       }
     }
-  }, [val, highlight, isFirstShowCode]);
+  }
 
   // fixed tab change highlight delay
   useEffect(() => {
@@ -73,16 +81,26 @@ export const Code: FC<CodeProps> = ({
   }, [highlight]);
   return (
     <div ref={containerRef}>
-      <Comp.pre>
-        <Comp.code
-          meta={highlightVal}
-          className={`language-${language}`}
-          codeHighlighter="prism"
-          codeWrap={false}
-        >
-          {val}
-        </Comp.code>
-      </Comp.pre>
+      <CodeBlockRuntime
+        lang={language}
+        onRendered={() => {
+          scrollToFirstHighlightLine();
+        }}
+        code={val}
+        shikiOptions={{
+          transformers: [
+            transformerNotationHighlight(),
+            transformerLineNumber(),
+            ...(highlightVal
+              ? [
+                  transformerRuntimeMetaHighlight({
+                    highlightVal,
+                  }),
+                ]
+              : []),
+          ],
+        }}
+      />
     </div>
   );
 };
