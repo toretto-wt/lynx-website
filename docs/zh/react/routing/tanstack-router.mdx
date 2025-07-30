@@ -1,0 +1,80 @@
+import { PackageManagerTabs } from '@theme';
+import { Go } from '@lynx';
+
+# TanStack Router
+
+现代化且可扩展的 React 应用路由解决方案
+
+### 介绍
+
+:::info
+ReactLynx 支持 Memory Routing 和 File-Based Routing
+
+- Lynx 由于浏览器 history API 限制需要使用 Memory Routing
+- Rspeedy 支持无缝集成 `@tanstack/router-plugin/rspack`
+
+:::
+
+### 安装依赖
+
+安装 dependencies：
+
+<PackageManagerTabs command="install @tanstack/react-router url-search-params-polyfill" />
+
+安装 devDependencies：
+
+<PackageManagerTabs command="install @tanstack/router-plugin -D" />
+
+### 配置
+
+1. 通过 `@tanstack/router-plugin/rspack` 实现 File-based Routing。
+2. 通过 alias 实现 React 18 API 兼容。
+
+```js title=lynx.config.js
+import { defineConfig } from '@lynx-js/rspeedy';
+import { tanstackRouter } from '@tanstack/router-plugin/rspack';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+
+export default defineConfig({
+  // ...其它的配置
+  source: {
+    alias: {
+      react$: require.resolve('@lynx-js/react/compat'),
+    },
+  },
+  tools: {
+    rspack: {
+      plugins: [
+        tanstackRouter({
+          target: 'react',
+        }),
+      ],
+    },
+  },
+});
+```
+
+### Polyfill
+
+`url-search-params-polyfill` 确保 URLSearchParams API 在 Lynx 中的兼容性。
+
+```tsx title=index.tsx
+import 'url-search-params-polyfill';
+
+import { root } from '@lynx-js/react';
+import { App } from './App.jsx';
+
+root.render(<App />);
+```
+
+### 示例
+
+<Go
+  example="tanstack-router"
+  defaultFile="src/App.tsx"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/plugin/static/tanstack-router-demo.jpg"
+  defaultEntryFile="dist/main.lynx.bundle"
+  entry="src/tanstack-router"
+/>
