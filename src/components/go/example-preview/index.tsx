@@ -39,6 +39,7 @@ export interface ExamplePreviewProps {
   schema?: string;
   rightFooter?: React.ReactNode;
   schemaOptions?: SchemaOptionsData;
+  langAlias?: Record<string, string>;
 }
 
 interface ExampleMetadata {
@@ -64,6 +65,7 @@ export const ExamplePreview = ({
   schema,
   rightFooter,
   schemaOptions,
+  langAlias,
 }: ExamplePreviewProps) => {
   const [currentName, setCurrentName] = useState(defaultFile);
   const [currentFile, setCurrentFile] = useState('');
@@ -197,6 +199,7 @@ export const ExamplePreview = ({
           ? `${exampleBaseUrl}/${example}/${exampleData?.previewImage}`
           : '')
       }
+      langAlias={langAlias}
       currentEntryFileUrl={currentEntryFileUrl}
       currentEntry={currentEntry}
       setCurrentEntry={setCurrentEntry}
