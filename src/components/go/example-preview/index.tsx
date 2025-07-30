@@ -5,8 +5,13 @@ import { ExampleContent } from './components';
 import { isAssetFileType } from './utils/example-data';
 import Callout from '../../Callout';
 import { SchemaOptionsData } from './hooks/use-switch-schema';
+import { useUrlWithBase } from '@site/src/lib/utils';
 
 const EXAMPLE_BASE_URL = '/lynx-examples';
+
+function useExampleBaseUrl() {
+  return useUrlWithBase(EXAMPLE_BASE_URL);
+}
 
 const ErrorWrap = ({ example }: { example: string }) => {
   return (
@@ -16,7 +21,7 @@ const ErrorWrap = ({ example }: { example: string }) => {
         <br />
         Please check if the file <code>example-metadata.json</code> exists in{' '}
         <code>
-          {EXAMPLE_BASE_URL}/{example}
+          {useExampleBaseUrl()}/{example}
         </code>{' '}
         .
       </p>
@@ -74,8 +79,11 @@ export const ExamplePreview = ({
       : highlight || {};
   }, [highlight, defaultFile]);
 
+  const exampleBaseUrl = useExampleBaseUrl();
+
   const { error, data: exampleData } = useSWR<ExampleMetadata>(
-    `${EXAMPLE_BASE_URL}/${example}/example-metadata.json`,
+    `${exampleBaseUrl}/${example}/example-metadata.json`,
+
     async (url) => {
       const response = await fetch(url);
       if (!response.ok) {
@@ -87,7 +95,7 @@ export const ExamplePreview = ({
   );
 
   const { trigger } = useSWRMutation(
-    `${EXAMPLE_BASE_URL}/${example}/${currentName}`,
+    `${exampleBaseUrl}/${example}/${currentName}`,
     async (url) => {
       const response = await fetch(url);
       if (!response.ok) {
@@ -103,7 +111,7 @@ export const ExamplePreview = ({
   };
   useEffect(() => {
     if (isAssetFile) {
-      setCurrentFile(`${EXAMPLE_BASE_URL}/${example}/${currentName}`);
+      setCurrentFile(`${exampleBaseUrl}/${example}/${currentName}`);
     } else {
       if (storeRef.current[currentName]) {
         setCurrentFile(storeRef.current[currentName]);
@@ -121,7 +129,7 @@ export const ExamplePreview = ({
       (file) => file.name === currentEntry,
     );
     if (file) {
-      const url = `${window.location.origin}${EXAMPLE_BASE_URL}/${example}/${file?.file}`;
+      const url = `${window.location.origin}${exampleBaseUrl}/${example}/${file?.file}`;
       if (schema) {
         const schemaUrl = schema.replace('{{{url}}}', url);
         return schemaUrl;
@@ -157,7 +165,7 @@ export const ExamplePreview = ({
       }
       if (tmpEntry) {
         if (tmpEntry.webFile) {
-          const fullWebFile = `${window.location.origin}${EXAMPLE_BASE_URL}/${example}/${tmpEntry.webFile}`;
+          const fullWebFile = `${window.location.origin}${exampleBaseUrl}/${example}/${tmpEntry.webFile}`;
           setDefaultWebPreviewFile(fullWebFile);
         }
         setCurrentEntry(tmpEntry.name);
@@ -186,7 +194,7 @@ export const ExamplePreview = ({
       previewImage={
         img ||
         (exampleData?.previewImage
-          ? `${EXAMPLE_BASE_URL}/${example}/${exampleData?.previewImage}`
+          ? `${exampleBaseUrl}/${example}/${exampleData?.previewImage}`
           : '')
       }
       currentEntryFileUrl={currentEntryFileUrl}
