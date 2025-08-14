@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useLocation, usePageData } from 'rspress/runtime';
+import { removeBase, useLocation, usePageData } from '@rspress/core/runtime';
 import {
   HomeLayout as BaseHomeLayout,
   Layout as BaseLayout,
-} from 'rspress/theme';
+} from '@rspress/core/theme';
 import './index.scss';
 
 import {
@@ -46,7 +46,7 @@ const zhSuffix = '原生体验';
 function HomeLayout() {
   const { pathname } = useLocation();
   const isZh = pathname.startsWith('/zh/');
-  const { page, siteData } = usePageData();
+  const { page } = usePageData();
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [text, setText] = useState(
@@ -57,10 +57,7 @@ function HomeLayout() {
 
   const routePath = useMemo(() => {
     let tmp = page.routePath.replace('/zh/', '/');
-    if (siteData.base && siteData.base !== '/') {
-      tmp = tmp.replace(siteData.base, '');
-    }
-    return tmp;
+    return removeBase(tmp);
   }, [page]);
 
   useBlogBtnDom(routePath);
@@ -168,4 +165,4 @@ function HomeLayout() {
 
 export { HomeLayout, Layout };
 
-export * from 'rspress/theme';
+export * from '@rspress/core/theme';

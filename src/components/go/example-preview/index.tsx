@@ -5,8 +5,9 @@ import { ExampleContent } from './components';
 import { isAssetFileType } from './utils/example-data';
 import Callout from '../../Callout';
 import { SchemaOptionsData } from './hooks/use-switch-schema';
+import { withBase } from '@rspress/core/runtime';
 
-const EXAMPLE_BASE_URL = '/lynx-examples';
+const EXAMPLE_BASE_URL = withBase('/lynx-examples');
 
 const ErrorWrap = ({ example }: { example: string }) => {
   return (
@@ -34,6 +35,19 @@ export interface ExamplePreviewProps {
   schema?: string;
   rightFooter?: React.ReactNode;
   schemaOptions?: SchemaOptionsData;
+  langAlias?: Record<string, string>;
+}
+
+interface ExampleMetadata {
+  name: string;
+  files: string[];
+  templateFiles: Array<{
+    name: string;
+    file: string;
+    webFile?: string;
+  }>;
+  previewImage?: string;
+  exampleGitBaseUrl?: string;
 }
 
 export const ExamplePreview = ({
@@ -47,6 +61,7 @@ export const ExamplePreview = ({
   schema,
   rightFooter,
   schemaOptions,
+  langAlias,
 }: ExamplePreviewProps) => {
   const [currentName, setCurrentName] = useState(defaultFile);
   const [currentFile, setCurrentFile] = useState('');
@@ -55,15 +70,16 @@ export const ExamplePreview = ({
 
   const [defaultWebPreviewFile, setDefaultWebPreviewFile] = useState('');
   const [initState, setInitState] = useState(false);
-  const storeRef = useRef({});
+  const storeRef = useRef<Record<string, string>>({});
   const highlightData = useMemo(() => {
     return typeof highlight === 'string'
       ? { [defaultFile]: highlight }
       : highlight || {};
   }, [highlight, defaultFile]);
 
-  const { error, data: exampleData } = useSWR(
+  const { error, data: exampleData } = useSWR<ExampleMetadata>(
     `${EXAMPLE_BASE_URL}/${example}/example-metadata.json`,
+
     async (url) => {
       const response = await fetch(url);
       if (!response.ok) {
@@ -177,6 +193,7 @@ export const ExamplePreview = ({
           ? `${EXAMPLE_BASE_URL}/${example}/${exampleData?.previewImage}`
           : '')
       }
+      langAlias={langAlias}
       currentEntryFileUrl={currentEntryFileUrl}
       currentEntry={currentEntry}
       setCurrentEntry={setCurrentEntry}

@@ -12,7 +12,8 @@ type Platform =
   | 'web'
   | 'macos'
   | 'macos-arm64'
-  | 'macos-intel';
+  | 'macos-intel'
+  | 'reactlynx';
 
 const PLATFORM_OPTIONS: Array<{
   id: Platform;
@@ -59,6 +60,11 @@ const PLATFORM_OPTIONS: Array<{
     id: 'macos-intel',
     label: 'macOS (x86_64)',
     iconName: mapPlatformNameToIconName('ios'),
+  },
+  {
+    id: 'reactlynx',
+    label: 'ReactLynx',
+    iconName: 'reactlynx',
   },
 ];
 
