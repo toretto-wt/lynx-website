@@ -262,6 +262,9 @@ importers:
       '@lynx-example/image':
         specifier: 0.5.0
         version: 0.5.0(@types/react@18.3.18)
+      '@lynx-example/input':
+        specifier: 0.6.1
+        version: 0.6.1(@types/react@18.3.18)
       '@lynx-example/layout':
         specifier: 0.5.2
         version: 0.5.2(@types/react@18.3.18)
@@ -307,6 +310,9 @@ importers:
       '@lynx-example/text':
         specifier: 0.5.2
         version: 0.5.2(@types/react@18.3.18)
+      '@lynx-example/textarea':
+        specifier: 0.6.1
+        version: 0.6.1(@types/react@18.3.18)
       '@lynx-example/view':
         specifier: 0.5.0
         version: 0.5.0(@types/react@18.3.18)
@@ -1208,6 +1214,9 @@ packages:
     resolution: {integrity: sha512-BXlysYiq7SCIeBB3/ZOb094fpwy4Ashy3X6pGNzmmwuXaQPsKx5ya9e3jGny8auxwI8LniSmV4hoM2ZEYBvhNg==}
     engines: {node: '>=18'}
 
+  '@lynx-example/input@0.6.1':
+    resolution: {integrity: sha512-lYC3oBcBcpLCUU5qF1Q9vCRmApM+dVO1+B2pkQJE87rhgOAzYmglyblpJYqQFeOcY0HTVopGsT+H/8+d3YM+aw==}
+
   '@lynx-example/layout@0.5.2':
     resolution: {integrity: sha512-0fgnYRneNiDLfWzVBoKVzg648oTKfhX3z2+L0equDmRiGKlUo/CARwnEPBE86oi5KGnwxHH/UeINJCrtcNKuVg==}
 
@@ -1261,6 +1270,9 @@ packages:
   '@lynx-example/text@0.5.2':
     resolution: {integrity: sha512-hYRtm3OcNWrHj64EcBZBweWa56cBP28qtcJnXlU0d8P397PF59QyiR6GYhbzhT/8N9sVHziFeNYmPFx+aTlqkA==}
 
+  '@lynx-example/textarea@0.6.1':
+    resolution: {integrity: sha512-KkXI6f84dlTK3nnxLT7yeOAyLCioV74c3U94EJqpshsZAmGZhMn14VdOUwmuOvh8a+Aed3NzhDakXQ+uuVCzUA==}
+
   '@lynx-example/view@0.5.0':
     resolution: {integrity: sha512-/aay8ZGfVOMQT5JfA2kZNqQMnQ0XSSaXZeq4WGmG/mkMx+VGH/0WMCEoqYfR6aLHGaGdGtYR/2msIisjh6T0SQ==}
     engines: {node: '>=18'}
@@ -1303,6 +1315,15 @@ packages:
 
   '@lynx-js/react@0.112.3':
     resolution: {integrity: sha512-A8bGpRbzNiiB0oap1RqY2mHD2imsgq2brFYLBrRroVVuklQyp2DXbs/KHltLIIKazARNz4W/wO4z7OGZphoGBg==}
+    peerDependencies:
+      '@lynx-js/types': '*'
+      '@types/react': ^18
+    peerDependenciesMeta:
+      '@lynx-js/types':
+        optional: true
+
+  '@lynx-js/react@0.112.4':
+    resolution: {integrity: sha512-4LcaKnH0Fb5LsGl0wzRLeCINEKwk/328qlzIEYavhAvcTyvVJl8dCBx7Ux1Zl4N7a9D/KeLyEl7NuJdqYt3Vmw==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18
@@ -6188,6 +6209,13 @@ snapshots:
       - '@lynx-js/types'
       - '@types/react'
 
+  '@lynx-example/input@0.6.1(@types/react@18.3.18)':
+    dependencies:
+      '@lynx-js/react': 0.112.4(@types/react@18.3.18)
+    transitivePeerDependencies:
+      - '@lynx-js/types'
+      - '@types/react'
+
   '@lynx-example/layout@0.5.2(@types/react@18.3.18)':
     dependencies:
       '@lynx-js/react': 0.107.0(@types/react@18.3.18)
@@ -6299,6 +6327,13 @@ snapshots:
       - '@lynx-js/types'
       - '@types/react'
 
+  '@lynx-example/textarea@0.6.1(@types/react@18.3.18)':
+    dependencies:
+      '@lynx-js/react': 0.112.4(@types/react@18.3.18)
+    transitivePeerDependencies:
+      - '@lynx-js/types'
+      - '@types/react'
+
   '@lynx-example/view@0.5.0(@types/react@18.3.18)':
     dependencies:
       '@lynx-js/react': 0.107.0(@types/react@18.3.18)
@@ -6327,6 +6362,11 @@ snapshots:
       preact: '@hongzhiyuan/preact@10.24.0-3d3cc198'
 
   '@lynx-js/react@0.112.3(@types/react@18.3.18)':
+    dependencies:
+      '@types/react': 18.3.18
+      preact: '@hongzhiyuan/preact@10.24.0-00213bad'
+
+  '@lynx-js/react@0.112.4(@types/react@18.3.18)':
     dependencies:
       '@types/react': 18.3.18
       preact: '@hongzhiyuan/preact@10.24.0-00213bad'
