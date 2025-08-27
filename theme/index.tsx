@@ -13,6 +13,7 @@ import {
   Search as PluginAlgoliaSearch,
   ZH_LOCALES,
 } from '@rspress/plugin-algolia/runtime';
+import type { SearchProps } from '@rspress/plugin-algolia/runtime';
 
 import './index.scss';
 
@@ -173,7 +174,7 @@ function HomeLayout() {
   );
 }
 
-const Search = () => {
+const Search = (props?: Partial<SearchProps> | undefined) => {
   const lang = useLang();
   return (
     <PluginAlgoliaSearch
@@ -184,6 +185,8 @@ const Search = () => {
         searchParameters: {
           facetFilters: [`lang:${lang}`],
         },
+        maxResultsPerGroup: 5,
+        ...props?.docSearchProps,
       }}
       locales={ZH_LOCALES}
     />
