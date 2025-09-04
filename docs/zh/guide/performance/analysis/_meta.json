@@ -1,24 +1,17 @@
 [
   {
     "type": "file",
-    "name": "record-trace",
-    "label": "guide.engineering.performance.record-trace",
+    "name": "reactlynx-render-pipeline-trace-analysis",
+    "label": "ReactLynx 渲染流水线",
     "overviewHeaders": [],
     "collapsible": true,
     "collapsed": true
   },
   {
     "type": "file",
-    "name": "trace-ui-basic-usage-guide",
-    "label": "guide.engineering.performance.trace-ui-basic-usage",
+    "name": "custom-trace",
+    "label": "guide.engineering.performance.custom-trace",
     "overviewHeaders": [],
-    "collapsible": true,
-    "collapsed": true
-  },
-  {
-    "type": "dir",
-    "name": "trace-advance-usage",
-    "label": "guide.engineering.performance.trace-advance-usage",
     "collapsible": true,
     "collapsed": true
   }
