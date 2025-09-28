@@ -54,7 +54,7 @@ We finally chose C API to directly map Lynx [platform-ui-tree](https://lynxjs.or
 
 - **Native UI Rendering**: Using [ArkUI's](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkui-overview) [C API](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ndk-build-ui-overview) to convert [element-tree](https://lynxjs.org/guide/spec.html#element-tree) operations directly to native UI calls, eliminating data conversion overhead for better performance in complex UI updates.
 
-- **Custom Native Element**：By utilizing HarmonyOS's [`BuilderNode`](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-user-defined-arktsnode-buildernode) and [`Builder`](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-builder) capabilities, developers can dynamically construct ArkTS subtrees and seamlessly embed them into the ArkUI node tree created by Lynx, achieving highly customized component implementations.
+- **Custom Native Element**: By utilizing HarmonyOS's [`BuilderNode`](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-user-defined-arktsnode-buildernode) and [`Builder`](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-builder) capabilities, developers can dynamically construct ArkTS subtrees and seamlessly embed them into the ArkUI node tree created by Lynx, achieving highly customized component implementations.
 
 ### Native Interactions
 
@@ -98,23 +98,23 @@ Lynx designed a complete event system that captures and responds to gestures and
   </tr>
 </table>
 
-- **Custom HitTest**：Accurately find the nodes responding to events on the Lynx platform-ui-tree, ensuring precise interactions.
-- **Gesture Support**：Integrates HarmonyOS gesture like [`tap`](https://lynxjs.org/api/lynx-api/event/touch-event#tap) and [`longpress`](https://lynxjs.org/api/lynx-api/event/touch-event#longpress), ensuring native-like gesture experience on Lynx.
-- **Custom Gesture Control in Embedded Scenarios**：Offers a comprehensive set of event APIs, including [`user-interaction-enabled`](https://lynxjs.org/api/elements/built-in/view.html#user-interaction-enabled)  and [`block-native-event`](https://lynxjs.org/api/elements/built-in/view.html#block-native-event), empowering Lynx developers to manage event propagation and handling logic for efficient processing of nested scrolling scenarios with native pages.
+- **Custom HitTest**: Accurately find the nodes responding to events on the Lynx platform-ui-tree, ensuring precise interactions.
+- **Gesture Support**: Integrates HarmonyOS gesture like [`tap`](https://lynxjs.org/api/lynx-api/event/touch-event#tap) and [`longpress`](https://lynxjs.org/api/lynx-api/event/touch-event#longpress), ensuring native-like gesture experience on Lynx.
+- **Custom Gesture Control in Embedded Scenarios**: Offers a comprehensive set of event APIs, including [`user-interaction-enabled`](https://lynxjs.org/api/elements/built-in/view.html#user-interaction-enabled)  and [`block-native-event`](https://lynxjs.org/api/elements/built-in/view.html#block-native-event), empowering Lynx developers to manage event propagation and handling logic for efficient processing of nested scrolling scenarios with native pages.
 
 ### Native Extensions
-- **Native Element Customization**：Lynx provides rich [built-in elements](https://lynxjs.org/api/elements/built-in/view.html) and supports integration of custom HarmonyOS native elements (via ArkTS), enabling developers to extend UI capabilities for highly customized interfaces while preserving native performance. More details: [Custom Element](/guide/custom-native-component.html#platform=harmony).
-- **Native Modules**：Lynx enables developers to call HarmonyOS native APIs from JavaScript, supporting both system services and custom native modules. More detail: [Native Modules](/guide/use-native-modules.html#platform=harmony)。
+- **Native Element Customization**: Lynx provides rich [built-in elements](https://lynxjs.org/api/elements/built-in/view.html) and supports integration of custom HarmonyOS native elements (via ArkTS), enabling developers to extend UI capabilities for highly customized interfaces while preserving native performance. More details: [Custom Element](/guide/custom-native-component.html#platform=harmony).
+- **Native Modules**: Lynx enables developers to call HarmonyOS native APIs from JavaScript, supporting both system services and custom native modules. More detail: [Native Modules](/guide/use-native-modules.html#platform=harmony)。
 
 
-## Create your first Lynx on HarmonyOS
+## Create Your First Lynx on HarmonyOS
 
 Lynx's official website offers [development documentation](/guide/start/integrate-with-existing-apps.html#platform=harmony) and [demo code](https://github.com/lynx-family/integrating-lynx-demo-projects/tree/main/harmony/HarmonyEmptyProject) for developers to get started quickly and efficiently.
 
-1. **Use the Pre-built Lynx Explorer**：For the easiest development setup, follow the [Quick Start](/guide/start/quick-start.html) to install the Lynx Explorer hap package and begin Lynx development.
+1. **Use the Pre-built Lynx Explorer**: For the easiest development setup, follow the [Quick Start](/guide/start/quick-start.html) to install the Lynx Explorer hap package and begin Lynx development.
 
-1. **Local Build of Lynx Explorer**：Developers interested in exploring the Lynx on HarmonyOS source code can also attempt local builds by following the guide [Building Lynx Explorer for Harmony](https://github.com/lynx-family/lynx/tree/develop/explorer/harmony).
+1. **Local Build of Lynx Explorer**: Developers interested in exploring the Lynx on HarmonyOS source code can also attempt local builds by following the guide [Building Lynx Explorer for Harmony](https://github.com/lynx-family/lynx/tree/develop/explorer/harmony).
 
-1. **Integrate with Existing Apps on HarmonyOS**：For developers with existing HarmonyOS application projects seeking to integrate Lynx, the official website provides [Integrate with Existing Apps](/guide/start/integrate-with-existing-apps.html#platform=harmony).
+1. **Integrate with Existing Apps on HarmonyOS**: For developers with existing HarmonyOS application projects seeking to integrate Lynx, the official website provides [Integrate with Existing Apps](/guide/start/integrate-with-existing-apps.html#platform=harmony).
 
 Welcome to the Lynx community. Let's build outstanding native experiences with Lynx on HarmonyOS!
