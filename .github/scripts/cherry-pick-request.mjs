@@ -13,6 +13,9 @@ import {
 const CONFIG_PATH = '.github/cherry-pick-config.json';
 const ISSUE_FORM_PATH = '.github/ISSUE_TEMPLATE/cherry_pick_request.yml';
 const SUMMARY_MARKER = '<!-- cherry-pick-request-summary -->';
+const SOURCE_PR_RE = /<!-- cherry-pick-source-pr:\s*(\d+)\s*-->/i;
+const SOURCE_PR_UNSET_MARKER = '<!-- cherry-pick-source-pr: unset -->';
+const LEGACY_SUMMARY_SOURCE_PR_RE = /^- Source PR:\s+#(\d+)\s*$/m;
 const GENERATED_MARKER_PREFIX = '<!-- cherry-pick-generated:';
 const APPROVED_FINGERPRINT_RE =
   /<!-- cherry-pick-approved-fingerprint:\s*([a-f0-9]+)\s*-->/i;
@@ -311,6 +314,12 @@ function parseRequestBody(body, config, repo = repoFromEnv()) {
   };
 }
 
+/** Parses only the source field so its identity survives other form errors. */
+function sourcePrFromRequestBody(body, repo = repoFromEnv()) {
+  const sections = parseIssueSections(body);
+  return normalizeSourcePr(getSection(sections, 'Source PR'), repo);
+}
+
 function fingerprint(parsed) {
   const payload = {
     sourcePr: parsed.sourcePr,
@@ -517,6 +526,18 @@ function approvedSnapshotFromBody(body) {
   };
 }
 
+/**
+ * Reads the immutable source PR from new metadata or the visible legacy
+ * summary line so requests created before the marker remain reusable.
+ */
+function sourcePrFromSummary(body) {
+  const content = String(body || '');
+  const metadata = content.split(/^### Reason\s*$/m, 1)[0];
+  const match =
+    content.match(SOURCE_PR_RE) || metadata.match(LEGACY_SUMMARY_SOURCE_PR_RE);
+  return match ? Number(match[1]) : null;
+}
+
 /** Finds the canonical bot-owned summary for one request. */
 async function getSummaryComment(repo, issueNumber) {
   return findBotComment(repo, issueNumber, SUMMARY_MARKER);
@@ -525,6 +546,9 @@ async function getSummaryComment(repo, issueNumber) {
 /** Maps a summary status and validation errors to maintainer instructions. */
 function nextActionForStatus(status, errors = []) {
   const normalized = String(status || '').toLowerCase();
+  const hasChangedSource = errors.some((error) =>
+    error.includes('Source PR cannot be changed'),
+  );
   const hasUnmergedSource = errors.some((error) =>
     error.includes('is not merged'),
   );
@@ -532,6 +556,9 @@ function nextActionForStatus(status, errors = []) {
     error.includes('changes GitHub Actions workflow files'),
   );
 
+  if (normalized === 'invalid' && hasChangedSource) {
+    return 'Restore the original source PR, or open a new cherry-pick request for the different source PR.';
+  }
   if (normalized === 'invalid' && hasUnmergedSource) {
     return 'Wait for the source PR to merge, then edit or reopen this request to revalidate. If validation passes, a user with write, maintain, or admin permission must add `cherry-pick:approved`.';
   }
@@ -563,6 +590,9 @@ function nextActionForStatus(status, errors = []) {
 }
 
 function renderValidationFailureComment(errors, workflowUrl, options = {}) {
+  const hasChangedSource = errors.some((error) =>
+    error.includes('Source PR cannot be changed'),
+  );
   const hasUnmergedSource = errors.some((error) =>
     error.includes('is not merged'),
   );
@@ -574,24 +604,28 @@ function renderValidationFailureComment(errors, workflowUrl, options = {}) {
     : options.reopened
       ? 'Cherry-pick request was reopened and revalidated, but it is still invalid.'
       : 'Cherry-pick request is invalid and will not execute yet.';
-  const nextSteps = hasWorkflowFiles
+  const nextSteps = hasChangedSource
     ? [
-        'Handle this backport manually, or use a separately approved process with a token that has workflow permission.',
-        'Do not retry this request with the default cherry-pick workflow unless the source PR no longer changes workflow files.',
+        'Restore the original source PR in this request, or close it and open a new Cherry-pick request for the different source PR.',
       ]
-    : hasUnmergedSource
+    : hasWorkflowFiles
       ? [
-          'Wait until the source PR is merged into the default branch.',
-          'After it is merged, edit this request issue or reopen it to trigger validation again.',
-          'If validation passes, the request will move back to `cherry-pick:pending-approval`.',
-          'A user with write, maintain, or admin permission must add `cherry-pick:approved` again before execution starts.',
+          'Handle this backport manually, or use a separately approved process with a token that has workflow permission.',
+          'Do not retry this request with the default cherry-pick workflow unless the source PR no longer changes workflow files.',
         ]
-      : [
-          'Edit this request issue and fix the fields above.',
-          'Save the issue, or reopen it, to trigger validation again.',
-          'If validation passes, the request will move back to `cherry-pick:pending-approval`.',
-          'A user with write, maintain, or admin permission must add `cherry-pick:approved` before execution starts.',
-        ];
+      : hasUnmergedSource
+        ? [
+            'Wait until the source PR is merged into the default branch.',
+            'After it is merged, edit this request issue or reopen it to trigger validation again.',
+            'If validation passes, the request will move back to `cherry-pick:pending-approval`.',
+            'A user with write, maintain, or admin permission must add `cherry-pick:approved` again before execution starts.',
+          ]
+        : [
+            'Edit this request issue and fix the fields above.',
+            'Save the issue, or reopen it, to trigger validation again.',
+            'If validation passes, the request will move back to `cherry-pick:pending-approval`.',
+            'A user with write, maintain, or admin permission must add `cherry-pick:approved` before execution starts.',
+          ];
 
   return [
     header,
@@ -614,6 +648,7 @@ function renderWorkflowRunLine() {
 function renderSummary({
   requestIssue,
   sourcePr,
+  sourcePrUnset,
   sourceTitle,
   sourceCommit,
   requestedBy,
@@ -632,6 +667,8 @@ function renderSummary({
 }) {
   const markerLines = [
     SUMMARY_MARKER,
+    sourcePr ? `<!-- cherry-pick-source-pr: ${sourcePr} -->` : '',
+    sourcePrUnset ? SOURCE_PR_UNSET_MARKER : '',
     approvedFingerprint
       ? `<!-- cherry-pick-approved-fingerprint: ${escapeHtmlComment(approvedFingerprint)} -->`
       : '',
@@ -711,9 +748,9 @@ function initialTargets(parsed) {
   }));
 }
 
-async function validateParsedRequest(repo, parsed) {
+async function validateParsedRequest(repo, parsed, sourcePull = null) {
   const repository = await getRepo(repo);
-  const pull = await getPull(repo, parsed.sourcePr);
+  const pull = sourcePull || (await getPull(repo, parsed.sourcePr));
   const errors = [];
   if (!pull.merged) {
     errors.push(`Source PR #${parsed.sourcePr} is not merged.`);
@@ -825,6 +862,8 @@ async function validateCommand() {
   const config = loadConfig();
   const event = getEvent();
   const issueNumber = event.issue.number;
+  const isInitializationEvent =
+    event.action === 'labeled' && event.label?.name === TYPE_LABEL;
   const isApprovalEvent =
     event.action === 'labeled' && event.label?.name === APPROVED_LABEL;
   console.log(
@@ -971,20 +1010,87 @@ async function validateCommand() {
   const requestBody = isApprovalEvent
     ? String(eventIssue.body || '')
     : String(issue.body || '');
+  const summary = await getSummaryComment(repo, issueNumber);
+  const summaryBody = String(summary?.body || '');
+  const establishedSourcePr = sourcePrFromSummary(summaryBody);
+  const sourcePrWasUnset = summaryBody.includes(SOURCE_PR_UNSET_MARKER);
+  const sourceIdentityMissing =
+    !establishedSourcePr && !sourcePrWasUnset && !isInitializationEvent;
+  if (sourceIdentityMissing) {
+    if (hasLabel(issue, APPROVED_LABEL)) {
+      await removeLabel(repo, issueNumber, APPROVED_LABEL);
+    }
+    await createIssueComment(
+      repo,
+      issueNumber,
+      [
+        'Cherry-pick request cannot be revalidated.',
+        '',
+        'The persisted source PR identity is missing from this initialized request.',
+        '',
+        'Next steps:',
+        '- Open a new cherry-pick request.',
+        '',
+        renderWorkflowRunLine(),
+      ].join('\n'),
+    );
+    setOutput('should_execute', 'false');
+    return;
+  }
   let parsed;
+  let requestedSourcePr;
+  let confirmedSourcePr;
+  let sourcePull;
   let validation = null;
   const errors = [];
   try {
-    parsed = parseRequestBody(requestBody, config, repo);
-    validation = await validateParsedRequest(repo, parsed);
-    errors.push(...validation.errors);
+    requestedSourcePr = sourcePrFromRequestBody(requestBody, repo);
   } catch (error) {
     errors.push(error.message);
   }
 
+  if (requestedSourcePr !== undefined) {
+    if (establishedSourcePr && requestedSourcePr !== establishedSourcePr) {
+      errors.push(
+        `Source PR cannot be changed from #${establishedSourcePr} to #${requestedSourcePr}. Restore #${establishedSourcePr} or open a new cherry-pick request.`,
+      );
+    } else {
+      try {
+        sourcePull = await getPull(repo, requestedSourcePr);
+        confirmedSourcePr = requestedSourcePr;
+      } catch (error) {
+        if (error.status === 404) {
+          errors.push(`Source PR #${requestedSourcePr} does not exist.`);
+        } else {
+          throw error;
+        }
+      }
+    }
+  }
+
+  try {
+    parsed = parseRequestBody(requestBody, config, repo);
+  } catch (error) {
+    if (!errors.includes(error.message)) {
+      errors.push(error.message);
+    }
+  }
+
+  if (parsed && sourcePull) {
+    try {
+      validation = await validateParsedRequest(repo, parsed, sourcePull);
+      errors.push(...validation.errors);
+    } catch (error) {
+      errors.push(error.message);
+    }
+  }
+
+  const persistedSourcePr = establishedSourcePr || confirmedSourcePr;
+
   const summaryBase = {
     requestIssue: issueNumber,
-    sourcePr: parsed?.sourcePr,
+    sourcePr: persistedSourcePr,
+    sourcePrUnset: !persistedSourcePr,
     sourceTitle: validation?.sourceTitle,
     sourceCommit: validation?.sourceCommit,
     requestedBy: eventIssue.user?.login,
@@ -1021,7 +1127,6 @@ async function validateCommand() {
   }
 
   const currentFingerprint = fingerprint(parsed);
-  const summary = await getSummaryComment(repo, issueNumber);
   let approvedSnapshot = approvedSnapshotFromBody(summary?.body || '');
 
   if (event.action === 'edited' || event.action === 'reopened') {
@@ -1314,16 +1419,24 @@ function prHasGeneratedIdentity(
 ) {
   const body = String(pr.body || '');
   const marker = generatedMarker(sourcePr, target, requestIssue);
-  const labelMatches = (pr.labels || []).some(
-    (label) => label.name === GENERATED_LABEL,
-  );
   return (
     pr.base?.ref === target &&
     pr.head?.repo?.full_name === `${repo.owner}/${repo.repo}` &&
     pr.head?.ref === branchName &&
-    labelMatches &&
     body.includes(marker)
   );
+}
+
+/** Restores optional generated-PR metadata without weakening idempotency. */
+async function reconcileGeneratedLabel(repo, pr) {
+  if ((pr.labels || []).some((label) => label.name === GENERATED_LABEL)) return;
+  try {
+    await addIssueLabelSafe(repo, pr.number, GENERATED_LABEL);
+  } catch (error) {
+    console.warn(
+      `Failed to restore ${GENERATED_LABEL} on PR #${pr.number}: ${error.message}`,
+    );
+  }
 }
 
 async function findExistingGeneratedPr(
@@ -1349,7 +1462,10 @@ async function findExistingGeneratedPr(
       branchName,
     ),
   );
-  if (open) return { kind: 'open', pr: open };
+  if (open) {
+    await reconcileGeneratedLabel(repo, open);
+    return { kind: 'open', pr: open };
+  }
 
   const closedPulls = await listPulls(
     repo,
@@ -1366,11 +1482,13 @@ async function findExistingGeneratedPr(
       branchName,
     ),
   );
-  if (closed)
+  if (closed) {
+    await reconcileGeneratedLabel(repo, closed);
     return {
       kind: closed.merged_at ? 'merged' : 'closed-unmerged',
       pr: closed,
     };
+  }
 
   return null;
 }
