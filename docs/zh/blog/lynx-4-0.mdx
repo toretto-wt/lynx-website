@@ -174,7 +174,15 @@ Lynx 已经支持折叠屏适配，并在 TikTok 中投入使用。我们希望�
 
 ### 媒体查询
 
-Lynx 4.0 实现了 CSS Media Queries Level 4 规范的一个子集，支持在 `@media` 规则中根据设备/视口环境条件应用不同的样式。
+Lynx 4.0 实现了 CSS Media Queries Level 4 规范的一个子集，支持在 `@media` 规则中根据设备/视口环境条件应用不同的样式，如以下示例。
+
+<Go
+  example="css"
+  defaultFile="src/media_query/index.tsx"
+  defaultEntryFile="dist/media_query.lynx.bundle"
+  entry="src/media_query"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/doc/media-query-portrait-ranges.png"
+/>
 
 使用过程中可以根据视口宽高、宽高比、横竖屏方向、像素密度和颜色模式偏好调整布局与样式。除了 `min-`、`max-` 写法，还支持 `and`、`or`、`not` 条件组合、逗号分隔的查询列表，以及 `width >= 768px` 这样的 Level 4 范围语法。完整的语法、单位、支持范围与使用限制见[媒体查询文档](/api/css/media-query)。
 
