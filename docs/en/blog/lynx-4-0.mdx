@@ -179,11 +179,17 @@ Lynx already supports foldable devices and is in production use in TikTok. We ai
 
 ### Media Queries
 
-Lynx 4.0 implements a subset of CSS Media Queries Level 4, so you can use `@media` rules to apply different styles based on device and viewport conditions.
+Lynx 4.0 implements a subset of CSS Media Queries Level 4, so you can use `@media` rules to apply different styles based on device and viewport conditions, as shown in the following example.
 
-You can adapt layouts and styles to viewport dimensions, aspect ratio, orientation, pixel density, and color scheme preferences. Alongside `min-` and `max-` syntax, Lynx supports `and`, `or`, and `not` conditions, comma-separated query lists, and Level 4 range syntax such as `width >= 768px`.
+<Go
+  example="css"
+  defaultFile="src/media_query/index.tsx"
+  defaultEntryFile="dist/media_query.lynx.bundle"
+  entry="src/media_query"
+  img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/doc/media-query-portrait-ranges.png"
+/>
 
-For the full syntax, units, supported features, and limitations, see [Media Queries](/api/css/media-query).
+You can adapt layouts and styles to viewport dimensions, aspect ratio, orientation, pixel density, and color scheme preferences. Alongside `min-` and `max-` syntax, Lynx supports `and`, `or`, and `not` conditions, comma-separated query lists, and Level 4 range syntax such as `width >= 768px`. For the full syntax, units, supported features, and limitations, see [Media Queries](/api/css/media-query).
 
 ### Desktop-Only Capabilities (macOS and Windows)
 
