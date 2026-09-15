@@ -205,6 +205,53 @@ Image won't load if its size is 0, but will load if prefetch-height is set
 Image won't load if its size is 0, but will load if prefetch-width is set
 
 
+### `region-to-decode`
+
+<AndroidOnly /> <IOSOnly />
+
+```tsx
+'region-to-decode'?: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+```
+
+Passes a rectangular region of the source image to the host's image loading service. Android supports this attribute starting in Lynx 3.9; iOS supports it starting in Lynx 3.8.
+
+- `x` and `y` specify the region's top-left corner, relative to the source image's top-left corner. Both must be non-negative.
+- `width` and `height` specify the region's dimensions. Both must be greater than zero.
+- All four fields are required and use source-image pixels, not CSS units or percentages. Use integer values for consistent cross-platform behavior: Android truncates numeric values to integers.
+- No region is set by default. Removing the attribute or providing an invalid region clears the previously configured region.
+
+For example, with an image loading service that supports region decoding, the following requests a 400-by-300-pixel region starting at `(100, 50)`:
+
+```tsx
+import sourceImage from './assets/large-image.jpg';
+
+export function RegionalImage() {
+  return (
+    <image
+      src={sourceImage}
+      region-to-decode={{ x: 100, y: 50, width: 400, height: 300 }}
+      style={{ width: '200px', height: '150px' }}
+    />
+  );
+}
+```
+
+:::warning
+
+This attribute passes decoding parameters to the host; it does not implement region decoding itself. The default open-source image services in Lynx 3.9 do not consume these parameters to decode a region. Setting this attribute alone does not guarantee cropping or reduced decoding costs.
+
+On Android, the host's image loading service must handle `ImageRequestInfo.getRegionToDecode()`. On iOS, it must handle the `NSValue` containing a `CGRect` under `contextInfo[LynxImageRegionToDecode]`; this context entry is passed for `src` requests, not placeholder requests. Supported image formats and handling of regions outside the image bounds depend on the service implementation.
+
+:::
+
+The attribute handling is available in the [Android 3.9 source](https://github.com/lynx-family/lynx/blob/d7f13487df0d69497148e93b71aded676a8fe243/platform/android/lynx_android/src/main/java/com/lynx/tasm/behavior/ui/image/LynxImageManager.java#L738) and the [iOS 3.8 source](https://github.com/lynx-family/lynx/blob/bd80d7adbe313d489f742d4503f39bb5460cc413/platform/darwin/ios/lynx/ui/image/LynxUIImage.mm#L1753).
+
+
 ### `src`
 
  <AndroidOnly /> <IOSOnly /> <ClayOnly /> <HarmonyOnly /> <VersionBadge>0.2</VersionBadge>
@@ -366,4 +413,3 @@ lynx.createSelectorQuery()
 ```
 
 Stops the animation, and it will reset the loop-count.
-

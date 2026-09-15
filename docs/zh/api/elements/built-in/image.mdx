@@ -158,6 +158,52 @@ prefetch-width/prefetch-height?: string;
 
 一般在需要提前加载图片的场景使用，设置大小建议和实际排版宽高大小保持一致。
 
+### `region-to-decode`
+
+<AndroidOnly /> <IOSOnly />
+
+```tsx
+'region-to-decode'?: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+```
+
+向宿主图片加载服务传递原图中需要解码的矩形区域。Android 从 Lynx 3.9 起支持该属性，iOS 从 Lynx 3.8 起支持。
+
+- `x`、`y` 表示区域左上角相对于原图左上角的位置，均须大于或等于 0。
+- `width`、`height` 表示区域的宽高，均须大于 0。
+- 四个字段均为必填，单位为原图像素，不是 CSS 单位或百分比。建议使用整数以保持跨平台行为一致：Android 会将数值截断为整数。
+- 默认不指定区域。移除属性或传入无效区域会清除此前设置的区域。
+
+例如，在图片加载服务支持区域解码的前提下，以下代码请求从原图 `(100, 50)` 位置开始、宽 400 像素且高 300 像素的区域：
+
+```tsx
+import sourceImage from './assets/large-image.jpg';
+
+export function RegionalImage() {
+  return (
+    <image
+      src={sourceImage}
+      region-to-decode={{ x: 100, y: 50, width: 400, height: 300 }}
+      style={{ width: '200px', height: '150px' }}
+    />
+  );
+}
+```
+
+:::warning
+
+该属性仅向宿主传递解码参数，并不自行实现区域解码。Lynx 3.9 默认的开源图片服务尚未使用这些参数进行区域解码，因此仅设置该属性并不能保证图片裁剪或解码开销降低。
+
+Android 宿主图片加载服务需要处理 `ImageRequestInfo.getRegionToDecode()`；iOS 需要处理 `contextInfo[LynxImageRegionToDecode]` 中封装 `CGRect` 的 `NSValue`，该上下文参数仅用于 `src` 请求，不用于占位图请求。支持的图片格式以及超出原图边界的区域如何处理，取决于图片服务的实现。
+
+:::
+
+属性处理可参见 [Android 3.9 源码](https://github.com/lynx-family/lynx/blob/d7f13487df0d69497148e93b71aded676a8fe243/platform/android/lynx_android/src/main/java/com/lynx/tasm/behavior/ui/image/LynxImageManager.java#L738)和 [iOS 3.8 源码](https://github.com/lynx-family/lynx/blob/bd80d7adbe313d489f742d4503f39bb5460cc413/platform/darwin/ios/lynx/ui/image/LynxUIImage.mm#L1753)。
+
 ### `cap-insets`
 
 ```tsx
