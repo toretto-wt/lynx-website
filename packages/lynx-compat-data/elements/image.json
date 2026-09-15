@@ -92,6 +92,41 @@
           }
         }
       },
+      "region-to-decode": {
+        "__compat": {
+          "description": "region-to-decode",
+          "support": {
+            "android": {
+              "version_added": "3.9",
+              "partial_implementation": true,
+              "notes": "Passes the region through ImageRequestInfo.getRegionToDecode(). Requires a host image loading service that implements region decoding; the default open-source service does not implement it."
+            },
+            "ios": {
+              "version_added": "3.8",
+              "partial_implementation": true,
+              "notes": "Passes the region through contextInfo[LynxImageRegionToDecode] for src requests only. Requires a host image loading service that implements region decoding; the default open-source service does not implement it."
+            },
+            "harmony": {
+              "version_added": false
+            },
+            "clay_android": {
+              "version_added": false
+            },
+            "clay_ios": {
+              "version_added": false
+            },
+            "clay_windows": {
+              "version_added": false
+            },
+            "clay_macos": {
+              "version_added": false
+            },
+            "web_lynx": {
+              "version_added": false
+            }
+          }
+        }
+      },
       "cap-insets": {
         "__compat": {
           "description": "cap-insets",

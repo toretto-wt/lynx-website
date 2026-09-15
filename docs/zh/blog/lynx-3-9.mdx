@@ -55,7 +55,7 @@ ReactLynx 在 3.9 中继续优化渲染层级和构建产物。
 
 ### `<image>`
 
-[`<image>`](/api/elements/built-in/image) 新增 `region-to-decode`，支持按图片区域解码。对于只需要展示局部区域的大图场景，这可以帮助减少不必要的解码成本。
+Android 上的 [`<image>`](/api/elements/built-in/image#region-to-decode) 新增 `region-to-decode`，可向宿主图片加载服务传递需要解码的原图区域；iOS 从 Lynx 3.8 起已支持该属性。对于只需要展示大图局部区域的场景，支持区域解码的图片服务可以据此减少不必要的解码成本；默认开源图片服务尚未实现区域解码。具体参数和接入要求见 API 文档。
 
 ### 其他元件
 

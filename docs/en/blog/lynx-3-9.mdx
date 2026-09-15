@@ -55,7 +55,7 @@ It also adds `preset-height` and `preset-width` for specifying dimensions before
 
 ### `<image>`
 
-[`<image>`](/api/elements/built-in/image) adds `region-to-decode` for region-based image decoding. This helps avoid unnecessary decode work when a page only needs to display part of a larger image.
+On Android, [`<image>`](/api/elements/built-in/image#region-to-decode) adds support for `region-to-decode`, which passes a source-image region to the host's image loading service. The attribute is also available on iOS starting in Lynx 3.8. A service that implements region decoding can use it to avoid unnecessary decode work when a page only displays part of a larger image; the default open-source image services do not implement region decoding. See the API reference for parameters and integration requirements.
 
 ### More Elements
 
