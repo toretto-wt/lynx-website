@@ -106,6 +106,20 @@ build image, document the prerequisite, and add CI coverage for its absence or
 availability. A command being installed on a developer machine or GitHub-hosted
 runner does not make it part of the build contract.
 
+## Media Assets
+
+The contributor-facing rules in
+[Media Assets](./CONTRIBUTING.md#media-assets) are the source of truth for
+media budgets and local media processing. Automated agents must not add or
+modify entries in `scripts/media/budget-allowlist.json`; exception decisions
+belong to developers and maintainers. Preserve the `media-budget` CI contract.
+
+Before adding or replacing any media file, double-check whether it really needs
+to live in this repository. Authoring/source assets should not enter the website
+repository. Identify the consuming page, example, test, or build step, and
+consider reusing an existing asset, a smaller web export, or a documentation CDN
+URL. Passing the size budget alone does not justify inclusion.
+
 ### `api-stats.json` doc links
 
 `packages/lynx-compat-data`'s `gen-stats` emits a `doc_url` per API. **When the
@@ -134,14 +148,33 @@ then fail on additions, modifications, deletions, or untracked output files.
 When adding such a tool, include its complete output set in the consistency
 check.
 
-## Documentation Runtime Imports
+## Documentation Imports
 
 The contributor-facing rules, examples, and alias selection table in
 [Portable Documentation Imports](./CONTRIBUTING.md#portable-documentation-imports)
 are the source of truth. Automated changes to `docs/` and `sharedDocs/` must
 follow them.
 
-### Resolver Details
+### Public Asset References
+
+The contributor-facing rules in
+[Public Asset References](./CONTRIBUTING.md#public-asset-references) are the
+source of truth.
+
+Rspress copies every file under `docs/public` into the build output while
+preserving its relative path. These public files are URL-addressed resources,
+not code modules. Files under `docs/` and `sharedDocs/` must not import from
+`@assets`; use an approved immutable documentation CDN URL by default. Standard
+Markdown public URLs are resolved under the configured documentation base. Raw
+HTML and explicit MDX JSX props must not use an unnormalized origin-root public
+URL such as `/assets/...`, which would request the asset from the current root
+deployment instead of the archived version. Normalize an existing public URL
+explicitly when it must be used outside standard Markdown.
+Documentation **MUST NOT** use an origin-root value such as
+`<Go img={'/assets/demo.gif'} />`; `Go` currently passes its `img` prop through
+unchanged.
+
+### Runtime Resolver Details
 
 The `@` alias resolves directly to `src` in OSS, but downstream consumers may
 configure it as an ordered list of source roots. The resolver uses the first

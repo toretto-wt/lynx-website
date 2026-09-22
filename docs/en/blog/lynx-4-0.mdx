@@ -230,7 +230,7 @@ input {
 
 With Lynx 4.0, [`<webview>`](/api/elements/built-in/webview) is now open source. You can use it to embed web pages in your Lynx application and reuse existing Web content across Android, iOS, HarmonyOS, macOS, and Windows.
 
-Set an explicit width and height for `<webview>`. You can load a URL or provide an HTML string directly.
+Set an explicit width and height for `<webview>`. You can load a URL on all supported platforms. On Android, iOS, and HarmonyOS, you can also provide an HTML string directly.
 
 #### Load Web Content
 
@@ -243,9 +243,9 @@ Use `src` to specify a URL:
   img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/elements/webview-base.gif"
 />
 
-#### Load an HTML String
+#### Load an HTML String on Android, iOS, and HarmonyOS
 
-Use `html` to provide HTML content:
+On Android, iOS, and HarmonyOS, use `html` to provide HTML content:
 
 <Go
   example="webview"

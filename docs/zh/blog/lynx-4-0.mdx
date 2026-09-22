@@ -225,7 +225,7 @@ input {
 
 Lynx 4.0 开源了 [`<webview>`](/api/elements/built-in/webview)，用于在 Lynx 页面中嵌入网页，便于复用已有的 Web 资源。它支持 Android、iOS、HarmonyOS、macOS 和 Windows。
 
-使用时，需要为 `<webview>` 设置确定的宽度和高度。你可以加载网页地址，也可以直接传入 HTML 字符串。
+使用时，需要为 `<webview>` 设置确定的宽度和高度。所有支持的平台都可以加载网页地址；在 Android、iOS 和 HarmonyOS 上，还可以直接传入 HTML 字符串。
 
 #### 加载 Web 内容
 
@@ -238,9 +238,9 @@ Lynx 4.0 开源了 [`<webview>`](/api/elements/built-in/webview)，用于在 Lyn
   img="https://lf-lynx.tiktok-cdns.com/obj/lynx-artifacts-oss-sg/lynx-website/assets/elements/webview-base.gif"
 />
 
-#### 加载 HTML 字符串
+#### 在 Android、iOS 和 HarmonyOS 上加载 HTML 字符串
 
-通过 `html` 传入 HTML 内容：
+在 Android、iOS 和 HarmonyOS 上，通过 `html` 传入 HTML 内容：
 
 <Go
   example="webview"
